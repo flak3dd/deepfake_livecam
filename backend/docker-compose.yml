@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  face-processor:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./models:/root/.insightface/models
+    restart: unless-stopped
