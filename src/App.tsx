@@ -30,7 +30,7 @@ function App() {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const recordedChunksRef = useRef<Blob[]>([]);
   const recordingIntervalRef = useRef<number>();
-  const [userId] = useState<string>('demo-user');
+  const [userId] = useState<string | undefined>(undefined);
   const [detectedFaces, setDetectedFaces] = useState<DetectedFace[]>([]);
 
   const [pipelineConfig, setPipelineConfig] = useState<ProcessingPipeline>({

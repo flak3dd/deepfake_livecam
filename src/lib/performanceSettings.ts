@@ -3,7 +3,7 @@ import { DeviceType, OptimizationMode } from './deviceDetection';
 
 export interface PerformanceSettings {
   id?: string;
-  user_id: string;
+  user_id?: string;
   device_type: DeviceType;
   optimization_mode: OptimizationMode;
   use_gpu_acceleration: boolean;
@@ -17,7 +17,11 @@ export interface PerformanceSettings {
   updated_at?: string;
 }
 
-export const getPerformanceSettings = async (userId: string): Promise<PerformanceSettings | null> => {
+export const getPerformanceSettings = async (userId: string | undefined): Promise<PerformanceSettings | null> => {
+  if (!userId) {
+    return null;
+  }
+
   const { data, error } = await supabase
     .from('performance_settings')
     .select('*')
@@ -35,6 +39,11 @@ export const getPerformanceSettings = async (userId: string): Promise<Performanc
 export const savePerformanceSettings = async (
   settings: PerformanceSettings
 ): Promise<PerformanceSettings | null> => {
+  if (!settings.user_id) {
+    console.log('No user ID provided, skipping database save');
+    return settings;
+  }
+
   const { data: existing } = await supabase
     .from('performance_settings')
     .select('id')

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Cpu, Zap, Gauge, Battery, Info, Apple } from 'lucide-react';
+import { Cpu, Zap, Gauge, Battery, Info, Apple, Settings } from 'lucide-react';
 import { deviceDetector, DeviceCapabilities, OptimizationMode } from '../lib/deviceDetection';
 import { getPerformanceSettings, savePerformanceSettings, getOptimizationPresets, PerformanceSettings } from '../lib/performanceSettings';
 
@@ -34,14 +34,14 @@ export function PerformanceSettingsComponent({ userId, onSettingsChange }: Perfo
         setSettings(defaultSettings);
       }
     } else {
-      const defaultSettings = createDefaultSettings('guest', caps);
+      const defaultSettings = createDefaultSettings(undefined, caps);
       setSettings(defaultSettings);
     }
 
     setLoading(false);
   };
 
-  const createDefaultSettings = (uid: string, caps: DeviceCapabilities): PerformanceSettings => {
+  const createDefaultSettings = (uid: string | undefined, caps: DeviceCapabilities): PerformanceSettings => {
     const preset = getOptimizationPresets(caps.deviceType)[caps.recommendedMode];
 
     return {
@@ -77,7 +77,12 @@ export function PerformanceSettingsComponent({ userId, onSettingsChange }: Perfo
   };
 
   const handleSaveSettings = async () => {
-    if (!settings || !userId) return;
+    if (!settings) return;
+
+    if (!userId) {
+      onSettingsChange?.(settings);
+      return;
+    }
 
     setSaving(true);
     const saved = await savePerformanceSettings(settings);
