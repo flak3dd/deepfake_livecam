@@ -56,7 +56,30 @@ High-performance Python backend for face swapping and restoration using state-of
 - **Windows Users:** [WINDOWS_SETUP_QUICK_REFERENCE.md](WINDOWS_SETUP_QUICK_REFERENCE.md) - Choose CPU or GPU setup
 - **Windows GPU Setup:** [WINDOWS_GPU_SETUP.md](WINDOWS_GPU_SETUP.md) - Complete CUDA installation guide
 - **Model Downloads:** [QUICK_START.md](QUICK_START.md) - Fix model download issues
+- **Dependency Guide:** [DEPENDENCY_COMPATIBILITY.md](DEPENDENCY_COMPATIBILITY.md) - Version compatibility & troubleshooting
 - **Apple Silicon:** [APPLE_SILICON_SETUP.md](APPLE_SILICON_SETUP.md) - Mac M1/M2/M3 setup
+
+## Verification Tools
+
+Before starting the backend, verify your setup:
+
+**Check Dependencies:**
+```bash
+python check_dependencies.py
+```
+Checks package versions, compatibility, and conflicts.
+
+**Verify Models:**
+```bash
+python download_models.py --verify
+```
+Verifies model files and checks SHA256 hashes for integrity.
+
+**Verify GPU Setup (if using GPU):**
+```bash
+python verify_gpu.py
+```
+Comprehensive GPU and CUDA verification with performance test.
 
 ## Installation
 

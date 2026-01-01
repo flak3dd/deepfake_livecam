@@ -150,7 +150,7 @@ def check_dependencies():
     return all_installed
 
 def check_models():
-    """Check if AI models are downloaded"""
+    """Check if AI models are downloaded and verify their integrity"""
     print_section("AI Models")
 
     backend_dir = Path(__file__).parent
@@ -163,6 +163,9 @@ def check_models():
     if buffalo_path.exists():
         onnx_files = list(buffalo_path.glob('*.onnx'))
         print(f"✓ Buffalo_l models: Found ({len(onnx_files)} files)")
+        for f in onnx_files:
+            size_mb = f.stat().st_size / (1024 * 1024)
+            print(f"  - {f.name} ({size_mb:.2f} MB)")
     else:
         print(f"✗ Buffalo_l models: NOT FOUND")
         print(f"  Expected at: {buffalo_path}")
@@ -173,6 +176,12 @@ def check_models():
     if inswapper_path.exists():
         size_mb = inswapper_path.stat().st_size / (1024 * 1024)
         print(f"✓ Inswapper model: Found ({size_mb:.2f} MB)")
+
+        # Check file size as basic integrity check
+        if size_mb < 500 or size_mb > 600:
+            print(f"  ⚠ Warning: Unexpected file size (expected ~536 MB)")
+            print(f"  Model may be corrupted or incomplete")
+            all_found = False
     else:
         print(f"✗ Inswapper model: NOT FOUND")
         print(f"  Expected at: {inswapper_path}")
@@ -182,6 +191,9 @@ def check_models():
     if not all_found:
         print("\n  Run: python download_models.py")
         print("  Or see: QUICK_START.md for manual download instructions")
+    else:
+        print("\n  For full integrity check with hash verification:")
+        print("  Run: python download_models.py --verify")
 
     return all_found
 

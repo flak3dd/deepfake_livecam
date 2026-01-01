@@ -74,30 +74,59 @@ Initializing AI models...
 All models initialized successfully!
 ```
 
-## Verification
+## Verification & Hash Checking
 
-After downloading models, verify they're in the right place:
+**CRITICAL: Always verify models after downloading to ensure integrity:**
 
 ```bash
 cd backend
 python download_models.py --verify
 ```
 
+**This performs:**
+- ✓ File presence check
+- ✓ File size validation
+- ✓ SHA256 hash verification (ensures file integrity)
+
 Expected output:
 ```
-✓ Buffalo_l models found at: .../backend/models/models/buffalo_l/
-  Found 5 ONNX model files:
-    - 1k3d68.onnx
-    - 2d106det.onnx
-    - det_10g.onnx
-    - genderage.onnx
-    - w600k_r50.onnx
+Model Verification
+============================================================
+Models directory: .../backend/models
 
-✓ Inswapper model found at: .../backend/models/inswapper_128.onnx
-  Size: 536.00 MB
+Checking Buffalo_l models...
+✓ Buffalo_l directory found
+  Found 5 ONNX model files
+  - 1k3d68.onnx (143.00 MB)
+  - 2d106det.onnx (2.31 MB)
+  - det_10g.onnx (2.31 MB)
+  - genderage.onnx (1.32 MB)
+  - w600k_r50.onnx (175.15 MB)
+Verifying 1k3d68.onnx...
+✓ 1k3d68.onnx hash verified successfully
+...
 
-All required models verified successfully!
+Checking Inswapper model...
+✓ Inswapper model found
+  Size: 536.04 MB
+Verifying inswapper_128.onnx...
+✓ inswapper_128.onnx hash verified successfully
+
+============================================================
+✓ All models verified successfully!
 ```
+
+**If hash verification fails:**
+1. The file is corrupted or incomplete
+2. Delete the file: `rm backend/models/inswapper_128.onnx`
+3. Re-download from official sources
+4. Verify again
+
+**Why hash verification matters:**
+- Detects corrupted downloads
+- Ensures model integrity
+- Prevents runtime errors from bad models
+- Security: verifies file hasn't been tampered with
 
 ## Directory Structure
 

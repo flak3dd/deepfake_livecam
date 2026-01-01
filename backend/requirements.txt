@@ -1,14 +1,38 @@
+# Core Web Framework
 fastapi==0.109.0
 uvicorn[standard]==0.27.0
 python-multipart==0.0.6
-insightface==0.7.3
-onnxruntime==1.16.3
-opencv-python==4.9.0.80
+
+# Core Dependencies - Must install first to avoid conflicts
 numpy==1.24.3
 pillow==10.2.0
+
+# PyTorch - Install separately with CUDA if needed
+# For CPU: pip install torch==2.1.2 torchvision==0.16.2
+# For GPU: pip install torch==2.1.2 torchvision==0.16.2 --index-url https://download.pytorch.org/whl/cu118
 torch==2.1.2
 torchvision==0.16.2
-gfpgan==1.3.8
+
+# Computer Vision
+opencv-python==4.9.0.80
+
+# ONNX Runtime - Use GPU version if available
+# For GPU: pip install onnxruntime-gpu==1.16.3
+onnxruntime==1.16.3
+
+# Face Processing - InsightFace
+insightface==0.7.3
+
+# Face Restoration - GFPGAN and dependencies
+# Install in order to avoid conflicts
 basicsr==1.4.2
 facexlib==0.3.0
+gfpgan==1.3.8
 realesrgan==0.3.0
+
+# Additional dependencies for compatibility
+scikit-image>=0.19.0
+scipy>=1.9.0
+tqdm>=4.64.0
+yapf>=0.32.0
+tb-nightly>=2.12.0

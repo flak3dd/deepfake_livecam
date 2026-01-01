@@ -75,7 +75,16 @@ echo [4/6] Activating virtual environment...
 call venv\Scripts\activate.bat
 
 echo.
-echo [5/6] Installing PyTorch with CUDA 11.8 support...
+echo [5/7] Installing core dependencies first (for compatibility)...
+pip install numpy==1.24.3 pillow==10.2.0
+if %errorlevel% neq 0 (
+    echo ERROR: Failed to install core dependencies
+    pause
+    exit /b 1
+)
+
+echo.
+echo [6/7] Installing PyTorch with CUDA 11.8 support...
 echo This will download ~2.5GB and may take 5-10 minutes...
 echo.
 pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 --index-url https://download.pytorch.org/whl/cu118
@@ -87,11 +96,13 @@ if %errorlevel% neq 0 (
 )
 
 echo.
-echo [6/6] Installing other requirements...
+echo [7/7] Installing other requirements...
 pip install -r requirements.txt
 if %errorlevel% neq 0 (
     echo.
     echo ERROR: Failed to install requirements
+    echo This might be due to dependency conflicts.
+    echo Run: python check_dependencies.py for details
     pause
     exit /b 1
 )
@@ -102,6 +113,17 @@ echo Verifying GPU support...
 echo ============================================================
 python -c "import torch; print(''); print('CUDA Available:', torch.cuda.is_available()); print('PyTorch Version:', torch.__version__); print('CUDA Version:', torch.version.cuda if torch.cuda.is_available() else 'N/A'); print('GPU Count:', torch.cuda.device_count() if torch.cuda.is_available() else 0); print('GPU Name:', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'N/A'); print('')"
 
+echo.
+echo Checking dependencies for conflicts...
+python check_dependencies.py
+if %errorlevel% neq 0 (
+    echo.
+    echo WARNING: Some dependency issues detected.
+    echo See output above for details.
+    echo.
+)
+
+echo.
 echo ============================================================
 echo Setup Complete!
 echo ============================================================
