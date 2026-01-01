@@ -67,7 +67,7 @@ Before starting the backend, verify your setup:
 ```bash
 python check_dependencies.py
 ```
-Checks package versions, compatibility, and conflicts.
+Checks package versions, compatibility, and conflicts. Validates all 40+ required packages including core libraries, ML frameworks, and support packages.
 
 **Verify Models:**
 ```bash
@@ -80,6 +80,18 @@ Verifies model files and checks SHA256 hashes for integrity.
 python verify_gpu.py
 ```
 Comprehensive GPU and CUDA verification with performance test.
+
+## Complete Dependency List
+
+The backend requires **40+ packages** including:
+- **Web Framework**: FastAPI, Uvicorn
+- **AI/ML Core**: PyTorch, ONNX Runtime, InsightFace
+- **Face Processing**: GFPGAN, BasicSR, FaceXLib, RealESRGAN
+- **Image Processing**: OpenCV, Pillow, NumPy, scikit-image, scipy
+- **Support Libraries**: lmdb, pyyaml, requests, addict, filterpy, aiofiles
+- **Development Tools**: tqdm, yapf, tensorboard
+
+See [REQUIREMENTS_UPDATE.md](REQUIREMENTS_UPDATE.md) for complete list with explanations.
 
 ## Installation
 

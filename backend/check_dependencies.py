@@ -262,16 +262,26 @@ def check_additional_packages():
         'scikit-image': '0.19.0',
         'scipy': '1.9.0',
         'tqdm': '4.64.0',
+        'lmdb': '1.4.0',
+        'pyyaml': '6.0',
+        'requests': '2.28.0',
+        'addict': '2.4.0',
+        'future': '0.18.0',
+        'onnx': '1.14.0',
+        'protobuf': '3.20.0',
+        'aiofiles': '23.1.0',
     }
 
+    all_ok = True
     for package, min_version in packages.items():
         installed = get_installed_version(package.replace('-', '_'))
         if installed:
             print(f"✓ Installed:         {package}=={installed}")
         else:
             print(f"⚠ NOT INSTALLED:     {package} (recommended: >={min_version})")
+            all_ok = False
 
-    return True
+    return all_ok
 
 def run_import_tests():
     """Try importing key packages to check for runtime errors"""
@@ -285,8 +295,16 @@ def run_import_tests():
         ('onnxruntime', 'ONNX Runtime'),
         ('gfpgan', 'GFPGAN'),
         ('basicsr', 'BasicSR'),
+        ('facexlib', 'FaceXLib'),
+        ('realesrgan', 'RealESRGAN'),
         ('PIL', 'Pillow'),
         ('numpy', 'NumPy'),
+        ('yaml', 'PyYAML'),
+        ('lmdb', 'LMDB'),
+        ('requests', 'Requests'),
+        ('addict', 'Addict'),
+        ('onnx', 'ONNX'),
+        ('aiofiles', 'AioFiles'),
     ]
 
     all_ok = True

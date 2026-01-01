@@ -114,6 +114,84 @@ pip install gfpgan==1.3.8
 pip install realesrgan==0.3.0
 ```
 
+## Additional Required Dependencies
+
+Beyond the core AI packages, several supporting libraries are required for proper functionality:
+
+### Core Support Libraries
+
+**lmdb** (>=1.4.0) - Lightning Memory-Mapped Database
+- Required by BasicSR and GFPGAN for dataset handling and model caching
+- Essential for efficient model loading and data management
+
+**pyyaml** (>=6.0) - YAML Parser
+- Configuration file parsing used by BasicSR, GFPGAN, and FaceXLib
+- Required for loading model configuration files
+
+**requests** (>=2.28.0) - HTTP Library
+- Used for downloading models from remote servers
+- Essential for automatic model downloads
+
+**addict** (>=2.4.0) - Dictionary Enhancement
+- Dictionary subclass for easier configuration management in BasicSR
+- Allows dot-notation access to nested dictionaries
+
+**future** (>=0.18.0) - Python 2/3 Compatibility
+- Required by some legacy dependencies
+- Ensures compatibility across Python versions
+
+### Image Processing & Enhancement
+
+**filterpy** (>=1.4.5) - Kalman Filtering
+- Used for face tracking smoothing and temporal consistency
+- Improves video processing quality
+
+**scikit-image** (>=0.19.0) - Image Processing
+- Advanced image processing algorithms
+- Used by GFPGAN and BasicSR for various transformations
+
+**scipy** (>=1.9.0) - Scientific Computing
+- Required by scikit-image and image processing operations
+- Provides mathematical functions for image enhancement
+
+### Model Format & Optimization
+
+**onnx** (>=1.14.0) - ONNX Model Format
+- Support for ONNX model format and optimizations
+- Required for model inspection and validation
+
+**protobuf** (>=3.20.0) - Protocol Buffers
+- Serialization format used by ONNX Runtime and TensorFlow
+- Required for model loading and inference
+
+### Web Framework Support
+
+**aiofiles** (>=23.1.0) - Async File Operations
+- Enables asynchronous file operations in FastAPI
+- Improves performance when handling large images/videos
+
+### Development & Debugging
+
+**tqdm** (>=4.64.0) - Progress Bars
+- Visual progress indicators for long operations
+- Used during model training and batch processing
+
+**yapf** (>=0.32.0) - Code Formatter
+- Python code formatter
+- Required by some development tools
+
+**tb-nightly** (>=2.12.0) - TensorBoard
+- Training visualization and logging
+- Used by BasicSR and GFPGAN for monitoring
+
+### Installation Note
+
+These dependencies are typically installed automatically as transitive dependencies when you install the main packages. However, explicitly listing them in requirements.txt ensures:
+- Version compatibility across the stack
+- Prevents installation issues
+- Makes dependencies explicit for troubleshooting
+- Ensures consistent environments across setups
+
 ## Known Compatibility Issues
 
 ### Issue 1: NumPy Version Conflicts
