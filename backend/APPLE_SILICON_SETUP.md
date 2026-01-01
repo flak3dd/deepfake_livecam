@@ -24,6 +24,20 @@ cd backend
 pip install -r requirements.txt
 ```
 
+### 3. Download AI Models
+
+Models will download automatically on first run, but you can pre-download them:
+
+```bash
+python download_models.py
+```
+
+This downloads:
+- Buffalo_l models (~1.5GB)
+- Inswapper face swap model (~500MB)
+
+Expected download time: 5-15 minutes depending on connection.
+
 ## Performance Optimization
 
 ### Metal Performance Shaders (MPS)
@@ -131,6 +145,33 @@ Larger batch sizes improve throughput on Apple Silicon:
 - M2/M3/M4: Batch size 4-8
 
 ## Troubleshooting
+
+### Model Loading Errors (AssertionError)
+
+If you see `AssertionError: 'detection' not in models` on startup:
+
+1. **Run the download script manually:**
+   ```bash
+   python download_models.py
+   ```
+
+2. **Verify models were downloaded:**
+   ```bash
+   python download_models.py --verify
+   ```
+
+3. **Check internet connection** - Models download from GitHub
+
+4. **Check disk space** - Need ~2GB free space
+
+5. **Check directory permissions:**
+   ```bash
+   ls -la backend/models/
+   ```
+
+If automatic download continues to fail, download manually:
+- Buffalo_l: https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip
+- Extract to `backend/models/models/buffalo_l/`
 
 ### "MPS not available" Error
 

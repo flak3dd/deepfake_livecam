@@ -164,9 +164,11 @@ Optimized endpoint for real-time video processing.
 
 ## Model Download
 
+### Automatic Download (Recommended)
+
 Models are downloaded automatically on first run:
 
-1. **InsightFace models** (~400MB)
+1. **InsightFace models** (~1.5GB)
    - Downloaded to `backend/models/`
    - buffalo_l detection model
    - inswapper_128.onnx face swapping model
@@ -179,7 +181,27 @@ Models are downloaded automatically on first run:
    - For background enhancement
    - RealESRGAN_x2plus.pth
 
-**First run may take several minutes** to download all models.
+**First run may take several minutes** to download all models (~2GB total).
+
+### Manual Download (If Automatic Fails)
+
+If models don't download automatically, use the download script:
+
+```bash
+cd backend
+python download_models.py
+```
+
+To verify models are installed:
+```bash
+python download_models.py --verify
+```
+
+The script will:
+- Download all required InsightFace models
+- Verify model integrity
+- Show download progress
+- Provide manual download links if needed
 
 ## Docker Deployment
 
@@ -228,20 +250,51 @@ pip install torch==2.1.2 torchvision==0.16.2 --index-url https://download.pytorc
 
 ## Troubleshooting
 
+### AssertionError on Startup
+
+**Issue:** `AssertionError: 'detection' not in models` or similar
+
+**Cause:** Buffalo_l models haven't been downloaded yet
+
+**Solutions:**
+1. Use the download script:
+   ```bash
+   python download_models.py
+   ```
+
+2. Check internet connection and retry
+
+3. Verify models directory is writable:
+   ```bash
+   ls -la backend/models/
+   ```
+
+4. Manual download if needed:
+   - Buffalo_l: https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip
+   - Extract to `backend/models/models/buffalo_l/`
+
 ### Models Not Downloading
 
 **Issue:** Models fail to download automatically
 
 **Solutions:**
 1. Check internet connection
-2. Verify firewall settings
-3. Manual download:
-   - InsightFace: https://github.com/deepinsight/insightface/tree/master/model_zoo
-   - GFPGAN: https://github.com/TencentARC/GFPGAN/releases
+2. Verify firewall settings (models download from GitHub)
+3. Ensure sufficient disk space (~2GB required)
+4. Run manual download script:
+   ```bash
+   python download_models.py
+   ```
+
+5. Manual download links:
+   - InsightFace buffalo_l: https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip
+   - Inswapper: https://github.com/deepinsight/insightface/releases/download/v0.7/inswapper_128.onnx
+   - GFPGAN: https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.4.pth
 
 Place models in:
-- InsightFace: `public/models/buffalo_l/`
-- GFPGAN: `public/models/`
+- InsightFace: `backend/models/models/buffalo_l/`
+- Inswapper: `backend/models/`
+- GFPGAN: `backend/models/` or `~/.cache/torch/hub/checkpoints/`
 
 ### Out of Memory (OOM)
 

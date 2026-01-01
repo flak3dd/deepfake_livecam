@@ -63,9 +63,20 @@ class ModelManager:
         """Get context ID for InsightFace initialization"""
         return 0 if self.device == 'cuda' else -1
 
+    def _verify_buffalo_models(self) -> bool:
+        """Check if buffalo_l models are downloaded"""
+        buffalo_path = self.models_dir / 'models' / 'buffalo_l'
+        if buffalo_path.exists():
+            logger.info(f"Buffalo_l models found at: {buffalo_path}")
+            return True
+        logger.warning(f"Buffalo_l models not found at: {buffalo_path}")
+        return False
+
     async def get_face_analysis(self) -> FaceAnalysis:
         if self.face_analysis is None:
             logger.info("Loading InsightFace analysis model (buffalo_l)...")
+            logger.info(f"Models directory: {self.models_dir}")
+            logger.info(f"INSIGHTFACE_ROOT: {os.environ.get('INSIGHTFACE_ROOT')}")
 
             providers = self._get_execution_providers()
             ctx_id = self._get_ctx_id()
@@ -76,20 +87,48 @@ class ModelManager:
             try:
                 self.face_analysis = FaceAnalysis(
                     name='buffalo_l',
-                    providers=providers
+                    providers=providers,
+                    root=str(self.models_dir)
                 )
                 self.face_analysis.prepare(ctx_id=ctx_id, det_size=(640, 640))
                 logger.info("Face analysis model loaded successfully")
+            except AssertionError as e:
+                logger.error(f"Model assertion failed - models may not be downloaded: {e}")
+                logger.info("Attempting to download buffalo_l models...")
+
+                try:
+                    self.face_analysis = FaceAnalysis(
+                        name='buffalo_l',
+                        providers=['CPUExecutionProvider'],
+                        root=str(self.models_dir),
+                        allowed_modules=['detection', 'recognition']
+                    )
+                    self.face_analysis.prepare(ctx_id=-1, det_size=(640, 640))
+                    logger.info("Face analysis model loaded successfully with CPU and auto-download")
+                except Exception as e2:
+                    logger.error(f"Failed to download models: {e2}")
+                    raise Exception(
+                        f"Could not load buffalo_l models. Please ensure:\n"
+                        f"1. Internet connection is available for model download\n"
+                        f"2. Directory {self.models_dir} is writable\n"
+                        f"3. Sufficient disk space is available (~2GB)\n"
+                        f"Original error: {e2}"
+                    )
             except Exception as e:
                 logger.error(f"Failed to load face analysis with providers {providers}: {e}")
                 logger.info("Falling back to CPU-only execution")
 
-                self.face_analysis = FaceAnalysis(
-                    name='buffalo_l',
-                    providers=['CPUExecutionProvider']
-                )
-                self.face_analysis.prepare(ctx_id=-1, det_size=(640, 640))
-                logger.info("Face analysis model loaded successfully with CPU fallback")
+                try:
+                    self.face_analysis = FaceAnalysis(
+                        name='buffalo_l',
+                        providers=['CPUExecutionProvider'],
+                        root=str(self.models_dir)
+                    )
+                    self.face_analysis.prepare(ctx_id=-1, det_size=(640, 640))
+                    logger.info("Face analysis model loaded successfully with CPU fallback")
+                except Exception as e2:
+                    logger.error(f"CPU fallback also failed: {e2}")
+                    raise
 
         return self.face_analysis
 
