@@ -8,9 +8,10 @@ import { RestorationControls } from './components/RestorationControls';
 import { SourceFaceManager } from './components/SourceFaceManager';
 import { Gallery } from './components/Gallery';
 import { BackendFaceSwap } from './components/BackendFaceSwap';
+import { PerformanceSettingsComponent } from './components/PerformanceSettings';
 import { FilterSettings } from './lib/videoFilters';
 import { uploadMedia } from './lib/supabase';
-import { Camera, Grid, Sparkles, Users, Cpu } from 'lucide-react';
+import { Camera, Grid, Sparkles, Users, Cpu, Settings } from 'lucide-react';
 import {
   ProcessingPipeline,
   RenderOptions,
@@ -21,7 +22,7 @@ import {
 import { FaceEffectSettings } from './lib/faceProcessing/FaceEffectsProcessor';
 
 function App() {
-  const [activeTab, setActiveTab] = useState<'camera' | 'gallery' | 'advanced' | 'deepface' | 'backend'>('camera');
+  const [activeTab, setActiveTab] = useState<'camera' | 'gallery' | 'advanced' | 'deepface' | 'backend' | 'settings'>('camera');
   const [filter, setFilter] = useState<FilterSettings>({ type: 'none', value: 0 });
   const [canvasRef, setCanvasRef] = useState<HTMLCanvasElement | null>(null);
   const [isRecording, setIsRecording] = useState(false);
@@ -229,6 +230,17 @@ function App() {
             <Grid className="inline mr-2" size={20} />
             Gallery
           </button>
+          <button
+            onClick={() => setActiveTab('settings')}
+            className={`px-6 py-3 font-semibold transition ${
+              activeTab === 'settings'
+                ? 'text-blue-500 border-b-2 border-blue-500'
+                : 'text-slate-400 hover:text-slate-300'
+            }`}
+          >
+            <Settings className="inline mr-2" size={20} />
+            Performance
+          </button>
         </div>
 
         {activeTab === 'camera' && (
@@ -412,6 +424,12 @@ function App() {
           <div className="bg-white rounded-lg shadow-lg p-6">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">Your Media Gallery</h2>
             <Gallery userId={userId} />
+          </div>
+        )}
+
+        {activeTab === 'settings' && (
+          <div className="max-w-3xl mx-auto">
+            <PerformanceSettingsComponent userId={userId} />
           </div>
         )}
       </div>

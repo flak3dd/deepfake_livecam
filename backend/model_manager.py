@@ -30,20 +30,40 @@ class ModelManager:
         self.face_analysis = None
         self.face_swapper = None
         self.gfpgan_restorer = None
-        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        self.device = self._get_best_device()
+        self.use_mps = self.device == 'mps'
 
         logger.info(f"Using device: {self.device}")
+        if self.use_mps:
+            logger.info("Apple Silicon detected - Metal Performance Shaders enabled")
         self._initialized = True
+
+    def _get_best_device(self) -> str:
+        if torch.cuda.is_available():
+            return 'cuda'
+        elif hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+            return 'mps'
+        else:
+            return 'cpu'
 
     async def get_face_analysis(self) -> FaceAnalysis:
         if self.face_analysis is None:
             logger.info("Loading InsightFace analysis model (buffalo_l)...")
+
+            if self.device == 'cuda':
+                providers = ['CUDAExecutionProvider', 'CPUExecutionProvider']
+            elif self.device == 'mps':
+                providers = ['CoreMLExecutionProvider', 'CPUExecutionProvider']
+            else:
+                providers = ['CPUExecutionProvider']
+
             self.face_analysis = FaceAnalysis(
                 name='buffalo_l',
-                providers=['CUDAExecutionProvider', 'CPUExecutionProvider'] if self.device == 'cuda'
-                else ['CPUExecutionProvider']
+                providers=providers
             )
-            self.face_analysis.prepare(ctx_id=0 if self.device == 'cuda' else -1, det_size=(640, 640))
+
+            ctx_id = 0 if self.device in ['cuda', 'mps'] else -1
+            self.face_analysis.prepare(ctx_id=ctx_id, det_size=(640, 640))
             logger.info("Face analysis model loaded successfully")
         return self.face_analysis
 
@@ -74,9 +94,10 @@ class ModelManager:
                 model_path = self.models_dir / 'GFPGANv1.4.pth'
 
                 bg_upsampler = None
-                if self.device == 'cuda':
+                if self.device in ['cuda', 'mps']:
                     try:
                         bg_model = RRDBNet(num_in_ch=3, num_out_ch=3, num_feat=64, num_block=23, num_grow_ch=32, scale=2)
+                        use_half = self.device == 'cuda'
                         bg_upsampler = RealESRGANer(
                             scale=2,
                             model_path='https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.1/RealESRGAN_x2plus.pth',
@@ -84,7 +105,7 @@ class ModelManager:
                             tile=400,
                             tile_pad=10,
                             pre_pad=0,
-                            half=True if self.device == 'cuda' else False
+                            half=use_half
                         )
                         logger.info("Background upsampler loaded")
                     except Exception as e:
@@ -112,6 +133,8 @@ class ModelManager:
         self.gfpgan_restorer = None
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
+        elif hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+            torch.mps.empty_cache()
         logger.info("Models cleaned up")
 
 model_manager = ModelManager()
