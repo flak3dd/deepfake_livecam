@@ -41,7 +41,7 @@ The backend integrates multiple state-of-the-art AI models for professional face
 
 **Download Location:**
 ```
-~/.insightface/models/buffalo_l/
+public/models/buffalo_l/
 ├── det_10g.onnx        # Face detector
 ├── w600k_r50.onnx      # Face recognition
 └── 2d106det.onnx       # Landmark detector
@@ -84,7 +84,7 @@ The backend integrates multiple state-of-the-art AI models for professional face
 
 **Download Location:**
 ```
-~/.insightface/models/inswapper_128.onnx
+public/models/inswapper_128.onnx
 ```
 
 ### 3. GFPGAN v1.4
@@ -138,7 +138,7 @@ The backend integrates multiple state-of-the-art AI models for professional face
 
 **Download Location:**
 ```
-~/.cache/torch/hub/checkpoints/GFPGANv1.4.pth
+public/models/GFPGANv1.4.pth
 ```
 
 ### 4. RealESRGAN
@@ -169,7 +169,7 @@ The backend integrates multiple state-of-the-art AI models for professional face
 
 **Download Location:**
 ```
-~/.cache/torch/hub/checkpoints/RealESRGAN_x2plus.pth
+public/models/RealESRGAN_x2plus.pth
 ```
 
 ## Runtime Frameworks
@@ -242,23 +242,16 @@ Models download automatically on first API call:
 ### Download Locations
 
 ```
-User Home Directory/
-├── .insightface/
-│   └── models/
-│       ├── buffalo_l/
-│       │   ├── det_10g.onnx
-│       │   ├── w600k_r50.onnx
-│       │   └── 2d106det.onnx
-│       └── inswapper_128.onnx
-├── .cache/
-│   └── torch/
-│       └── hub/
-│           └── checkpoints/
-│               ├── GFPGANv1.4.pth
-│               └── RealESRGAN_x2plus.pth
-└── .deep-live-cam/
+project-root/
+└── public/
     └── models/
-        └── (manual model storage)
+        ├── buffalo_l/
+        │   ├── det_10g.onnx
+        │   ├── w600k_r50.onnx
+        │   └── 2d106det.onnx
+        ├── inswapper_128.onnx
+        ├── GFPGANv1.4.pth
+        └── RealESRGAN_x2plus.pth
 ```
 
 ### Manual Download
@@ -267,15 +260,15 @@ If automatic download fails:
 
 #### InsightFace Models
 1. Download from: https://github.com/deepinsight/insightface/releases
-2. Place in: `~/.insightface/models/buffalo_l/`
+2. Place in: `public/models/buffalo_l/`
 
 #### GFPGAN
 1. Download: https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.4.pth
-2. Place in: `~/.cache/torch/hub/checkpoints/`
+2. Place in: `public/models/`
 
 #### RealESRGAN
 1. Download: https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.1/RealESRGAN_x2plus.pth
-2. Place in: `~/.cache/torch/hub/checkpoints/`
+2. Place in: `public/models/`
 
 ## Performance Optimization
 

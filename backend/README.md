@@ -167,7 +167,7 @@ Optimized endpoint for real-time video processing.
 Models are downloaded automatically on first run:
 
 1. **InsightFace models** (~400MB)
-   - Downloaded to `~/.insightface/models/`
+   - Downloaded to `public/models/`
    - buffalo_l detection model
    - inswapper_128.onnx face swapping model
 
@@ -240,8 +240,8 @@ pip install torch==2.1.2 torchvision==0.16.2 --index-url https://download.pytorc
    - GFPGAN: https://github.com/TencentARC/GFPGAN/releases
 
 Place models in:
-- InsightFace: `~/.insightface/models/buffalo_l/`
-- GFPGAN: `~/.deep-live-cam/models/`
+- InsightFace: `public/models/buffalo_l/`
+- GFPGAN: `public/models/`
 
 ### Out of Memory (OOM)
 

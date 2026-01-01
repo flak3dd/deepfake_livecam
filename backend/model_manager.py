@@ -24,8 +24,12 @@ class ModelManager:
         if self._initialized:
             return
 
-        self.models_dir = Path.home() / '.deep-live-cam' / 'models'
+        backend_dir = Path(__file__).parent
+        project_root = backend_dir.parent
+        self.models_dir = project_root / 'public' / 'models'
         self.models_dir.mkdir(parents=True, exist_ok=True)
+
+        os.environ['INSIGHTFACE_ROOT'] = str(self.models_dir)
 
         self.face_analysis = None
         self.face_swapper = None

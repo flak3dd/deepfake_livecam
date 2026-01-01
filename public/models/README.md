@@ -1,12 +1,14 @@
 # Face Processing Models
 
-This directory stores machine learning models used for face processing features.
+This directory stores machine learning models used for both frontend and backend face processing.
 
-## Automatic Model Loading
+## Frontend Models (Browser-based)
 
-The application automatically downloads and initializes face detection models from CDN. No manual setup is required.
+### Automatic Model Loading
 
-## Detection Methods
+The frontend automatically downloads and initializes face detection models from CDN. No manual setup required.
+
+### Detection Methods
 
 The app uses a dual-detection system with automatic fallback:
 
@@ -21,13 +23,33 @@ The app uses a dual-detection system with automatic fallback:
    - Activates if MediaPipe fails to load
    - Works in more restrictive network environments
 
+## Backend Models (Python-based)
+
+### InsightFace Models (~400MB)
+- **buffalo_l**: Face detection and analysis
+- **inswapper_128.onnx**: Professional face swapping
+
+### Face Restoration Models
+- **GFPGANv1.4.pth** (~350MB): Face restoration and enhancement
+- **RealESRGAN_x2plus.pth** (~67MB): Background upscaling
+
+### Automatic Download
+Models download automatically when the Python backend starts for the first time. See `backend/README.md` for details.
+
 ## Directory Structure
 
 ```
 models/
-├── mediapipe/          # MediaPipe models (optional local cache)
-├── tensorflow/         # TensorFlow.js models (future use)
-└── README.md          # This file
+├── buffalo_l/              # InsightFace detection models
+│   ├── det_10g.onnx
+│   ├── w600k_r50.onnx
+│   └── 2d106det.onnx
+├── inswapper_128.onnx      # Face swapping model
+├── GFPGANv1.4.pth          # Face restoration model
+├── RealESRGAN_x2plus.pth   # Background upscaling
+├── mediapipe/              # MediaPipe models (optional cache)
+├── tensorflow/             # TensorFlow.js models (future use)
+└── README.md               # This file
 ```
 
 ## Performance Tips
