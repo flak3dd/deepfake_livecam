@@ -164,84 +164,69 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
-            <Camera className="text-blue-500" size={36} />
-            Deep Live Cam
-          </h1>
-          <p className="text-slate-400">Professional live streaming with effects and face detection</p>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-cyan-900/20 via-transparent to-transparent pointer-events-none"></div>
 
-        <div className="flex gap-2 mb-8 border-b border-slate-700">
-          <button
-            onClick={() => setActiveTab('camera')}
-            className={`px-6 py-3 font-semibold transition ${
-              activeTab === 'camera'
-                ? 'text-blue-500 border-b-2 border-blue-500'
-                : 'text-slate-400 hover:text-slate-300'
-            }`}
-          >
-            <Camera className="inline mr-2" size={20} />
-            Basic Camera
-          </button>
-          <button
-            onClick={() => setActiveTab('advanced')}
-            className={`px-6 py-3 font-semibold transition ${
-              activeTab === 'advanced'
-                ? 'text-blue-500 border-b-2 border-blue-500'
-                : 'text-slate-400 hover:text-slate-300'
-            }`}
-          >
-            <Sparkles className="inline mr-2" size={20} />
-            Advanced Face
-          </button>
-          <button
-            onClick={() => setActiveTab('deepface')}
-            className={`px-6 py-3 font-semibold transition ${
-              activeTab === 'deepface'
-                ? 'text-blue-500 border-b-2 border-blue-500'
-                : 'text-slate-400 hover:text-slate-300'
-            }`}
-          >
-            <Users className="inline mr-2" size={20} />
-            DeepFace Live
-          </button>
-          <button
-            onClick={() => setActiveTab('backend')}
-            className={`px-6 py-3 font-semibold transition ${
-              activeTab === 'backend'
-                ? 'text-blue-500 border-b-2 border-blue-500'
-                : 'text-slate-400 hover:text-slate-300'
-            }`}
-          >
-            <Cpu className="inline mr-2" size={20} />
-            Backend Swap
-          </button>
-          <button
-            onClick={() => setActiveTab('gallery')}
-            className={`px-6 py-3 font-semibold transition ${
-              activeTab === 'gallery'
-                ? 'text-blue-500 border-b-2 border-blue-500'
-                : 'text-slate-400 hover:text-slate-300'
-            }`}
-          >
-            <Grid className="inline mr-2" size={20} />
-            Gallery
-          </button>
-          <button
-            onClick={() => setActiveTab('settings')}
-            className={`px-6 py-3 font-semibold transition ${
-              activeTab === 'settings'
-                ? 'text-blue-500 border-b-2 border-blue-500'
-                : 'text-slate-400 hover:text-slate-300'
-            }`}
-          >
-            <Settings className="inline mr-2" size={20} />
-            Performance
-          </button>
-        </div>
+      <div className="relative">
+        <header className="backdrop-blur-xl bg-gray-900/50 border-b border-gray-800/50 sticky top-0 z-50">
+          <div className="container mx-auto px-6 py-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-teal-500 rounded-xl blur-lg opacity-50"></div>
+                  <div className="relative bg-gradient-to-r from-cyan-500 to-teal-500 p-2.5 rounded-xl">
+                    <Camera className="text-white" size={28} />
+                  </div>
+                </div>
+                <div>
+                  <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                    Deep Live Cam
+                  </h1>
+                  <p className="text-sm text-gray-400 mt-0.5">Professional AI-Powered Face Processing</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 px-4 py-2 bg-gray-800/50 rounded-lg border border-gray-700/50">
+                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                  <span className="text-sm text-gray-300">Live</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div className="container mx-auto px-6 py-8">
+          <nav className="mb-8">
+            <div className="bg-gray-900/50 backdrop-blur-lg rounded-2xl border border-gray-800/50 p-2 inline-flex gap-2 shadow-2xl">
+              {[
+                { id: 'camera', icon: Camera, label: 'Camera' },
+                { id: 'advanced', icon: Sparkles, label: 'Advanced' },
+                { id: 'deepface', icon: Users, label: 'DeepFace' },
+                { id: 'backend', icon: Cpu, label: 'Backend' },
+                { id: 'gallery', icon: Grid, label: 'Gallery' },
+                { id: 'settings', icon: Settings, label: 'Settings' },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as any)}
+                  className={`group relative px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
+                    activeTab === tab.id
+                      ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-white shadow-lg shadow-cyan-500/30'
+                      : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <tab.icon className={`transition-transform duration-300 ${activeTab === tab.id ? 'scale-110' : 'group-hover:scale-105'}`} size={18} />
+                    <span className="text-sm">{tab.label}</span>
+                  </div>
+                  {activeTab === tab.id && (
+                    <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 opacity-20 blur-xl"></div>
+                  )}
+                </button>
+              ))}
+            </div>
+          </nav>
 
         {activeTab === 'camera' && (
           <div className="space-y-6">
@@ -421,17 +406,23 @@ function App() {
         )}
 
         {activeTab === 'gallery' && (
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">Your Media Gallery</h2>
+          <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 shadow-2xl p-8">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-gradient-to-r from-cyan-500 to-teal-500 rounded-lg">
+                <Grid className="text-white" size={24} />
+              </div>
+              <h2 className="text-2xl font-bold text-white">Your Media Gallery</h2>
+            </div>
             <Gallery userId={userId} />
           </div>
         )}
 
         {activeTab === 'settings' && (
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-4xl mx-auto">
             <PerformanceSettingsComponent userId={userId} />
           </div>
         )}
+        </div>
       </div>
     </div>
   );

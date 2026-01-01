@@ -125,27 +125,36 @@ export function PerformanceSettingsComponent({ userId, onSettingsChange }: Perfo
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 space-y-6">
+    <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 shadow-2xl p-8 space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-gray-800">Performance Settings</h3>
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-gradient-to-r from-cyan-500 to-teal-500 rounded-lg">
+            <Settings className="text-white" size={24} />
+          </div>
+          <h3 className="text-2xl font-bold text-white">Performance Settings</h3>
+        </div>
         {userId && (
           <button
             onClick={handleSaveSettings}
             disabled={saving}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors text-sm"
+            className="relative group px-6 py-3 bg-gradient-to-r from-cyan-500 to-teal-500 text-white rounded-xl font-medium hover:shadow-lg hover:shadow-cyan-500/30 disabled:opacity-50 transition-all duration-300"
           >
-            {saving ? 'Saving...' : 'Save'}
+            {saving ? 'Saving...' : 'Save Settings'}
+            <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 opacity-0 group-hover:opacity-20 blur-xl transition-opacity"></div>
           </button>
         )}
       </div>
 
       {capabilities.isAppleSilicon && (
-        <div className="bg-gradient-to-r from-gray-800 to-gray-900 rounded-lg p-4 text-white">
-          <div className="flex items-center gap-3">
-            <Apple className="w-6 h-6" />
+        <div className="relative overflow-hidden bg-gradient-to-r from-gray-800 to-gray-850 rounded-xl p-5 border border-gray-700/50">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-cyan-500/10 to-transparent rounded-full blur-2xl"></div>
+          <div className="relative flex items-center gap-4">
+            <div className="p-3 bg-gray-900/50 rounded-xl border border-gray-700/50">
+              <Apple className="w-7 h-7 text-gray-300" />
+            </div>
             <div>
-              <div className="font-semibold">Apple Silicon Detected</div>
-              <div className="text-sm text-gray-300">
+              <div className="font-semibold text-white text-lg">Apple Silicon Detected</div>
+              <div className="text-sm text-gray-400 mt-1">
                 {capabilities.isM1OrBetter ? 'M1/M2/M3/M4 chip with Metal acceleration' : 'Optimized for Apple Silicon'}
               </div>
             </div>
@@ -154,111 +163,115 @@ export function PerformanceSettingsComponent({ userId, onSettingsChange }: Perfo
       )}
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-3">
+        <label className="block text-sm font-medium text-gray-300 mb-4">
           Optimization Mode
         </label>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-4">
           {(['performance', 'balanced', 'quality', 'battery'] as OptimizationMode[]).map((mode) => (
             <button
               key={mode}
               onClick={() => handleModeChange(mode)}
-              className={`p-4 rounded-lg border-2 transition-all ${
+              className={`group relative p-5 rounded-xl border-2 transition-all duration-300 ${
                 settings.optimization_mode === mode
-                  ? 'border-blue-500 bg-blue-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-cyan-500 bg-cyan-500/10'
+                  : 'border-gray-700/50 bg-gray-800/30 hover:border-gray-600/50 hover:bg-gray-800/50'
               }`}
             >
-              <div className="flex items-center gap-2 mb-2">
-                {getModeIcon(mode)}
-                <span className="font-medium capitalize">{mode}</span>
+              <div className="flex items-center gap-3 mb-2">
+                <div className={`p-2 rounded-lg ${settings.optimization_mode === mode ? 'bg-cyan-500/20' : 'bg-gray-700/50'}`}>
+                  {getModeIcon(mode)}
+                </div>
+                <span className={`font-semibold capitalize ${settings.optimization_mode === mode ? 'text-white' : 'text-gray-300'}`}>
+                  {mode}
+                </span>
               </div>
-              <p className="text-xs text-gray-600 text-left">
+              <p className={`text-xs text-left ${settings.optimization_mode === mode ? 'text-gray-300' : 'text-gray-500'}`}>
                 {getModeDescription(mode)}
               </p>
+              {settings.optimization_mode === mode && (
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 opacity-10 blur-xl"></div>
+              )}
             </button>
           ))}
         </div>
       </div>
 
-      <div className="space-y-4 pt-4 border-t">
-        <h4 className="text-sm font-semibold text-gray-700">Current Configuration</h4>
+      <div className="space-y-4 pt-6 border-t border-gray-800/50">
+        <h4 className="text-sm font-semibold text-gray-300">Current Configuration</h4>
 
-        <div className="grid grid-cols-2 gap-4 text-sm">
-          <div>
-            <span className="text-gray-600">Device Type:</span>
-            <div className="font-medium capitalize">{capabilities.deviceType.replace('_', ' ')}</div>
-          </div>
-
-          <div>
-            <span className="text-gray-600">Max Resolution:</span>
-            <div className="font-medium">{settings.max_resolution}p</div>
-          </div>
-
-          <div>
-            <span className="text-gray-600">Thread Count:</span>
-            <div className="font-medium">{settings.thread_count} threads</div>
-          </div>
-
-          <div>
-            <span className="text-gray-600">Batch Size:</span>
-            <div className="font-medium">{settings.batch_size}</div>
-          </div>
+        <div className="grid grid-cols-2 gap-4">
+          {[
+            { label: 'Device Type', value: capabilities.deviceType.replace('_', ' ') },
+            { label: 'Max Resolution', value: `${settings.max_resolution}p` },
+            { label: 'Thread Count', value: `${settings.thread_count} threads` },
+            { label: 'Batch Size', value: settings.batch_size },
+          ].map((item) => (
+            <div key={item.label} className="bg-gray-800/30 rounded-lg p-4 border border-gray-700/30">
+              <span className="text-xs text-gray-500 block mb-1">{item.label}</span>
+              <div className="font-semibold text-white capitalize">{item.value}</div>
+            </div>
+          ))}
         </div>
 
-        <div className="space-y-2">
-          <label className="flex items-center gap-2">
+        <div className="space-y-3">
+          <label className="relative inline-flex items-center cursor-pointer">
             <input
               type="checkbox"
               checked={settings.use_gpu_acceleration}
               onChange={(e) => setSettings({ ...settings, use_gpu_acceleration: e.target.checked })}
-              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+              className="sr-only peer"
               disabled={!capabilities.hasGPU}
             />
-            <span className="text-sm text-gray-700">GPU Acceleration</span>
+            <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-cyan-500/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-cyan-500 peer-checked:to-teal-500 peer-disabled:opacity-50"></div>
+            <span className="ml-3 text-sm font-medium text-gray-300">GPU Acceleration</span>
             {!capabilities.hasGPU && (
-              <span className="text-xs text-gray-500">(Not available)</span>
+              <span className="ml-2 text-xs text-gray-500">(Not available)</span>
             )}
           </label>
 
           {capabilities.isAppleSilicon && (
-            <label className="flex items-center gap-2">
+            <label className="relative inline-flex items-center cursor-pointer">
               <input
                 type="checkbox"
                 checked={settings.enable_metal}
                 onChange={(e) => setSettings({ ...settings, enable_metal: e.target.checked })}
-                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                className="sr-only peer"
               />
-              <span className="text-sm text-gray-700">Metal Performance Shaders</span>
+              <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-cyan-500/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-cyan-500 peer-checked:to-teal-500"></div>
+              <span className="ml-3 text-sm font-medium text-gray-300">Metal Performance Shaders</span>
             </label>
           )}
 
           {capabilities.deviceType === 'nvidia_gpu' && (
-            <label className="flex items-center gap-2">
+            <label className="relative inline-flex items-center cursor-pointer">
               <input
                 type="checkbox"
                 checked={settings.enable_tensorrt}
                 onChange={(e) => setSettings({ ...settings, enable_tensorrt: e.target.checked })}
-                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                className="sr-only peer"
               />
-              <span className="text-sm text-gray-700">TensorRT Optimization</span>
+              <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-cyan-500/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-cyan-500 peer-checked:to-teal-500"></div>
+              <span className="ml-3 text-sm font-medium text-gray-300">TensorRT Optimization</span>
             </label>
           )}
         </div>
       </div>
 
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <div className="flex gap-3">
-          <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-          <div className="text-sm text-blue-800">
-            <p className="font-medium mb-1">Performance Tips</p>
+      <div className="bg-cyan-500/10 border border-cyan-500/20 rounded-xl p-5">
+        <div className="flex gap-4">
+          <div className="p-2 bg-cyan-500/20 rounded-lg h-fit">
+            <Info className="w-5 h-5 text-cyan-400" />
+          </div>
+          <div className="text-sm text-cyan-100">
+            <p className="font-semibold mb-2 text-white">Performance Tips</p>
             {capabilities.isAppleSilicon ? (
-              <ul className="list-disc list-inside space-y-1 text-blue-700">
+              <ul className="list-disc list-inside space-y-1.5 text-cyan-200">
                 <li>Metal acceleration provides best performance on Apple Silicon</li>
                 <li>Performance mode recommended for M1 Pro/Max/Ultra and M2/M3</li>
                 <li>Backend processing uses CoreML when available</li>
               </ul>
             ) : (
-              <ul className="list-disc list-inside space-y-1 text-blue-700">
+              <ul className="list-disc list-inside space-y-1.5 text-cyan-200">
                 <li>Enable GPU acceleration for better performance</li>
                 <li>Lower resolution for real-time processing</li>
                 <li>Quality mode for final output</li>
@@ -268,11 +281,18 @@ export function PerformanceSettingsComponent({ userId, onSettingsChange }: Perfo
         </div>
       </div>
 
-      <div className="text-xs text-gray-500 space-y-1">
-        <div>CPU Cores: {capabilities.cores}</div>
-        <div>Estimated Memory: {(capabilities.memory / 1024).toFixed(0)} GB</div>
-        <div>Max Texture Size: {capabilities.maxTextureSize}px</div>
-        <div>WebGL: {capabilities.hasWebGL ? 'Supported' : 'Not supported'}</div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-6 border-t border-gray-800/50">
+        {[
+          { label: 'CPU Cores', value: capabilities.cores },
+          { label: 'Memory', value: `${(capabilities.memory / 1024).toFixed(0)} GB` },
+          { label: 'Max Texture', value: `${capabilities.maxTextureSize}px` },
+          { label: 'WebGL', value: capabilities.hasWebGL ? 'Supported' : 'No' },
+        ].map((spec) => (
+          <div key={spec.label} className="text-center">
+            <div className="text-xs text-gray-500 mb-1">{spec.label}</div>
+            <div className="text-sm font-semibold text-gray-300">{spec.value}</div>
+          </div>
+        ))}
       </div>
     </div>
   );

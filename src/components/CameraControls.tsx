@@ -42,51 +42,57 @@ export const CameraControls: React.FC<CameraControlsProps> = ({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex gap-2 justify-center flex-wrap">
-        <button
-          onClick={onTakePhoto}
-          disabled={isRecording}
-          className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg font-semibold transition"
-        >
-          <Camera size={20} />
-          Take Photo
-        </button>
+      <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 shadow-2xl p-6">
+        <div className="flex gap-3 justify-center flex-wrap">
+          <button
+            onClick={onTakePhoto}
+            disabled={isRecording}
+            className="group relative flex items-center gap-2.5 px-8 py-4 bg-gradient-to-r from-cyan-500 to-teal-500 hover:shadow-lg hover:shadow-cyan-500/30 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-semibold transition-all duration-300"
+          >
+            <Camera size={20} />
+            Take Photo
+            <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 opacity-0 group-hover:opacity-20 blur-xl transition-opacity"></div>
+          </button>
 
-        <button
-          onClick={isRecording ? onStopRecording : onStartRecording}
-          className={`flex items-center gap-2 px-6 py-3 text-white rounded-lg font-semibold transition ${
-            isRecording
-              ? 'bg-red-600 hover:bg-red-700'
-              : 'bg-green-600 hover:bg-green-700'
-          }`}
-        >
-          {isRecording ? (
-            <>
-              <Square size={20} />
-              Stop Recording
-            </>
-          ) : (
-            <>
-              <Video size={20} />
-              Start Recording
-            </>
-          )}
-        </button>
+          <button
+            onClick={isRecording ? onStopRecording : onStartRecording}
+            className={`group relative flex items-center gap-2.5 px-8 py-4 text-white rounded-xl font-semibold transition-all duration-300 ${
+              isRecording
+                ? 'bg-gradient-to-r from-red-500 to-rose-500 hover:shadow-lg hover:shadow-red-500/30'
+                : 'bg-gradient-to-r from-green-500 to-emerald-500 hover:shadow-lg hover:shadow-green-500/30'
+            }`}
+          >
+            {isRecording ? (
+              <>
+                <Square size={20} />
+                Stop Recording
+              </>
+            ) : (
+              <>
+                <Video size={20} />
+                Start Recording
+              </>
+            )}
+            <div className={`absolute inset-0 rounded-xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity ${
+              isRecording ? 'bg-gradient-to-r from-red-500 to-rose-500' : 'bg-gradient-to-r from-green-500 to-emerald-500'
+            }`}></div>
+          </button>
 
-        <button
-          onClick={handleDownloadPhoto}
-          disabled={!downloadReady}
-          className="flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 text-white rounded-lg font-semibold transition"
-        >
-          <Download size={20} />
-          Download
-        </button>
+          <button
+            onClick={handleDownloadPhoto}
+            disabled={!downloadReady}
+            className="group relative flex items-center gap-2.5 px-8 py-4 bg-gray-700/50 hover:bg-gray-600/50 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-semibold border border-gray-600/50 transition-all duration-300"
+          >
+            <Download size={20} />
+            Download
+          </button>
+        </div>
       </div>
 
       {isRecording && (
-        <div className="flex justify-center items-center gap-3 bg-red-50 border border-red-200 rounded-lg p-3">
-          <div className="w-3 h-3 bg-red-600 rounded-full animate-pulse" />
-          <span className="text-red-700 font-semibold">Recording: {formatTime(recordingTime)}</span>
+        <div className="flex justify-center items-center gap-3 bg-red-500/10 border border-red-500/30 backdrop-blur-lg rounded-xl p-4">
+          <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse shadow-lg shadow-red-500/50" />
+          <span className="text-red-300 font-semibold text-lg">Recording: {formatTime(recordingTime)}</span>
         </div>
       )}
     </div>

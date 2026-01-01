@@ -29,10 +29,10 @@ export function FaceSwapControls({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 space-y-4">
+    <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 shadow-2xl p-6 space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-gray-800">Face Swap</h3>
-        <label className="flex items-center cursor-pointer">
+        <h3 className="text-lg font-semibold text-white">Face Swap</h3>
+        <label className="relative inline-flex items-center cursor-pointer">
           <input
             type="checkbox"
             checked={enabled}
@@ -40,23 +40,25 @@ export function FaceSwapControls({
             className="sr-only peer"
             disabled={!hasSourceFace}
           />
-          <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600 peer-disabled:opacity-50"></div>
+          <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-cyan-500/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-cyan-500 peer-checked:to-teal-500 peer-disabled:opacity-50"></div>
         </label>
       </div>
 
       {!hasSourceFace && (
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <p className="text-sm text-yellow-800">
+        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
+          <p className="text-sm text-yellow-200">
             Upload a source face image to enable face swapping
           </p>
         </div>
       )}
 
       <div className="space-y-3">
-        <label className="flex items-center justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-lg appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
+        <label className="flex items-center justify-center w-full h-32 px-4 transition bg-gray-800/30 border-2 border-gray-700/50 border-dashed rounded-xl appearance-none cursor-pointer hover:border-cyan-500/50 hover:bg-gray-800/50 focus:outline-none group">
           <div className="flex flex-col items-center space-y-2">
-            <Upload className="w-8 h-8 text-gray-400" />
-            <span className="text-sm text-gray-600">
+            <div className="p-3 bg-gray-700/50 rounded-lg group-hover:bg-cyan-500/20 transition-colors">
+              <Upload className="w-6 h-6 text-gray-400 group-hover:text-cyan-400 transition-colors" />
+            </div>
+            <span className="text-sm text-gray-300 group-hover:text-cyan-300 transition-colors">
               {hasSourceFace ? 'Change Source Face' : 'Upload Source Face'}
             </span>
           </div>
@@ -70,18 +72,18 @@ export function FaceSwapControls({
 
         <button
           onClick={() => setShowAdvanced(!showAdvanced)}
-          className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-800"
+          className="flex items-center gap-2 text-sm text-gray-400 hover:text-cyan-400 transition-colors"
         >
           <Sliders className="w-4 h-4" />
           {showAdvanced ? 'Hide' : 'Show'} Advanced Settings
         </button>
 
         {showAdvanced && (
-          <div className="space-y-4 pt-4 border-t">
+          <div className="space-y-4 pt-4 border-t border-gray-800/50">
             <div>
-              <label className="flex items-center justify-between text-sm font-medium text-gray-700 mb-2">
+              <label className="flex items-center justify-between text-sm font-medium text-gray-300 mb-2">
                 <span>Blend Strength</span>
-                <span className="text-gray-500">{options.blendStrength.toFixed(2)}</span>
+                <span className="text-cyan-400">{options.blendStrength.toFixed(2)}</span>
               </label>
               <input
                 type="range"
@@ -92,14 +94,14 @@ export function FaceSwapControls({
                 onChange={(e) =>
                   onOptionsChange({ ...options, blendStrength: parseFloat(e.target.value) })
                 }
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                className="w-full h-2 bg-gray-700 rounded-full appearance-none cursor-pointer"
               />
             </div>
 
             <div>
-              <label className="flex items-center justify-between text-sm font-medium text-gray-700 mb-2">
+              <label className="flex items-center justify-between text-sm font-medium text-gray-300 mb-2">
                 <span>Face Scale</span>
-                <span className="text-gray-500">{options.faceScale.toFixed(2)}</span>
+                <span className="text-cyan-400">{options.faceScale.toFixed(2)}</span>
               </label>
               <input
                 type="range"
@@ -110,14 +112,14 @@ export function FaceSwapControls({
                 onChange={(e) =>
                   onOptionsChange({ ...options, faceScale: parseFloat(e.target.value) })
                 }
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                className="w-full h-2 bg-gray-700 rounded-full appearance-none cursor-pointer"
               />
             </div>
 
             <div>
-              <label className="flex items-center justify-between text-sm font-medium text-gray-700 mb-2">
+              <label className="flex items-center justify-between text-sm font-medium text-gray-300 mb-2">
                 <span>Erasing Threshold</span>
-                <span className="text-gray-500">{options.erasingThreshold.toFixed(2)}</span>
+                <span className="text-cyan-400">{options.erasingThreshold.toFixed(2)}</span>
               </label>
               <input
                 type="range"
@@ -128,11 +130,11 @@ export function FaceSwapControls({
                 onChange={(e) =>
                   onOptionsChange({ ...options, erasingThreshold: parseFloat(e.target.value) })
                 }
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                className="w-full h-2 bg-gray-700 rounded-full appearance-none cursor-pointer"
               />
             </div>
 
-            <div className="flex items-center">
+            <label htmlFor="colorCorrection" className="relative inline-flex items-center cursor-pointer">
               <input
                 type="checkbox"
                 id="colorCorrection"
@@ -140,12 +142,11 @@ export function FaceSwapControls({
                 onChange={(e) =>
                   onOptionsChange({ ...options, colorCorrection: e.target.checked })
                 }
-                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                className="sr-only peer"
               />
-              <label htmlFor="colorCorrection" className="ml-2 text-sm font-medium text-gray-700">
-                Color Correction
-              </label>
-            </div>
+              <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-cyan-500/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-cyan-500 peer-checked:to-teal-500"></div>
+              <span className="ml-3 text-sm font-medium text-gray-300">Color Correction</span>
+            </label>
           </div>
         )}
       </div>
