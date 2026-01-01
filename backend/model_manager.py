@@ -94,16 +94,32 @@ class ModelManager:
         if self.gfpgan_restorer is None:
             logger.info("Loading GFPGAN v1.4 face restoration model...")
             try:
-                model_path = self.models_dir / 'GFPGANv1.4.pth'
+                gfpgan_model_path = self.models_dir / 'GFPGANv1.4.pth'
+
+                if gfpgan_model_path.exists():
+                    logger.info(f"Using local GFPGAN model: {gfpgan_model_path}")
+                    gfpgan_path = str(gfpgan_model_path)
+                else:
+                    logger.info("Local GFPGAN model not found, will download from GitHub")
+                    gfpgan_path = 'https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.4.pth'
 
                 bg_upsampler = None
                 if self.device in ['cuda', 'mps']:
                     try:
+                        realesrgan_model_path = self.models_dir / 'RealESRGAN_x2plus.pth'
+
+                        if realesrgan_model_path.exists():
+                            logger.info(f"Using local RealESRGAN model: {realesrgan_model_path}")
+                            realesrgan_path = str(realesrgan_model_path)
+                        else:
+                            logger.info("Local RealESRGAN model not found, will download from GitHub")
+                            realesrgan_path = 'https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.1/RealESRGAN_x2plus.pth'
+
                         bg_model = RRDBNet(num_in_ch=3, num_out_ch=3, num_feat=64, num_block=23, num_grow_ch=32, scale=2)
                         use_half = self.device == 'cuda'
                         bg_upsampler = RealESRGANer(
                             scale=2,
-                            model_path='https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.1/RealESRGAN_x2plus.pth',
+                            model_path=realesrgan_path,
                             model=bg_model,
                             tile=400,
                             tile_pad=10,
@@ -115,7 +131,7 @@ class ModelManager:
                         logger.warning(f"Could not load background upsampler: {e}")
 
                 self.gfpgan_restorer = GFPGANer(
-                    model_path='https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.4.pth',
+                    model_path=gfpgan_path,
                     upscale=2,
                     arch='clean',
                     channel_multiplier=2,
