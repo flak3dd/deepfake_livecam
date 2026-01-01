@@ -17,19 +17,7 @@ This guide explains how to run the Deep Live Cam backend with optimized performa
 pip install --upgrade torch torchvision
 ```
 
-### 2. Install ONNX Runtime for CoreML
-
-```bash
-pip install onnxruntime-silicon
-```
-
-Or use the standard ONNX Runtime with CoreML provider:
-
-```bash
-pip install onnxruntime
-```
-
-### 3. Install Project Dependencies
+### 2. Install Project Dependencies
 
 ```bash
 cd backend
@@ -40,11 +28,14 @@ pip install -r requirements.txt
 
 ### Metal Performance Shaders (MPS)
 
-The backend automatically detects Apple Silicon and uses MPS when available:
+The backend automatically detects Apple Silicon and optimizes accordingly:
 
 - **Automatic Detection**: On startup, the backend checks for MPS availability
-- **CoreML Execution**: ONNX models use CoreML for hardware acceleration
+- **CPU Execution for ONNX**: InsightFace Buffalo_l models use CPU execution (CoreML not fully compatible)
+- **MPS for PyTorch**: GFPGAN and face restoration use MPS acceleration
 - **Memory Management**: Efficient memory handling with `torch.mps.empty_cache()`
+
+**Note**: While Apple Silicon is detected, InsightFace models (buffalo_l, inswapper_128) currently run on CPU for maximum compatibility. The Buffalo_l models are optimized for CPU/CUDA and may not work reliably with CoreML execution providers.
 
 ### Optimization Modes
 
@@ -122,9 +113,9 @@ For sustained performance:
 ### 3. Model Optimization
 
 The backend uses:
-- **InsightFace**: CoreML-optimized face detection
-- **ONNX Runtime**: Hardware-accelerated inference
-- **GFPGAN**: Automatic MPS device selection
+- **InsightFace**: CPU-optimized face detection (buffalo_l models work best on CPU)
+- **ONNX Runtime**: CPU execution for maximum compatibility
+- **GFPGAN**: Automatic MPS device selection for face restoration
 
 ### 4. Resolution Selection
 
@@ -177,15 +168,17 @@ If you encounter memory errors:
 3. **Restart backend**: Clear memory cache
 4. **Close other apps**: Free up unified memory
 
-### CoreML Provider Not Found
+### ONNX Runtime Configuration
 
-If you see "CoreMLExecutionProvider not available":
+The backend automatically uses CPU execution for InsightFace models on Apple Silicon for maximum compatibility:
 
-```bash
-pip install onnxruntime-silicon
-```
+- **Default Behavior**: CPU execution provider (most reliable)
+- **Context ID**: Uses `-1` for non-CUDA devices
+- **Automatic Fallback**: If any provider fails, automatically falls back to CPU
 
-Or download from: https://github.com/microsoft/onnxruntime/releases
+You don't need to install special ONNX Runtime packages. The standard `onnxruntime` from pip works perfectly with CPU execution.
+
+If you see provider-related warnings in logs, they are expected and the system will automatically fall back to CPU execution.
 
 ## Benchmarks
 

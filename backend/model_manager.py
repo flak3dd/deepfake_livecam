@@ -49,45 +49,90 @@ class ModelManager:
         else:
             return 'cpu'
 
+    def _get_execution_providers(self):
+        """Get ONNX Runtime execution providers with fallback support"""
+        if self.device == 'cuda':
+            return ['CUDAExecutionProvider', 'CPUExecutionProvider']
+        elif self.device == 'mps':
+            logger.info("Apple Silicon detected - attempting CoreML provider with CPU fallback")
+            return ['CPUExecutionProvider']
+        else:
+            return ['CPUExecutionProvider']
+
+    def _get_ctx_id(self):
+        """Get context ID for InsightFace initialization"""
+        return 0 if self.device == 'cuda' else -1
+
     async def get_face_analysis(self) -> FaceAnalysis:
         if self.face_analysis is None:
             logger.info("Loading InsightFace analysis model (buffalo_l)...")
 
-            if self.device == 'cuda':
-                providers = ['CUDAExecutionProvider', 'CPUExecutionProvider']
-            elif self.device == 'mps':
-                providers = ['CoreMLExecutionProvider', 'CPUExecutionProvider']
-            else:
-                providers = ['CPUExecutionProvider']
+            providers = self._get_execution_providers()
+            ctx_id = self._get_ctx_id()
 
-            self.face_analysis = FaceAnalysis(
-                name='buffalo_l',
-                providers=providers
-            )
+            logger.info(f"Using ONNX providers: {providers}")
+            logger.info(f"Using context ID: {ctx_id}")
 
-            ctx_id = 0 if self.device in ['cuda', 'mps'] else -1
-            self.face_analysis.prepare(ctx_id=ctx_id, det_size=(640, 640))
-            logger.info("Face analysis model loaded successfully")
+            try:
+                self.face_analysis = FaceAnalysis(
+                    name='buffalo_l',
+                    providers=providers
+                )
+                self.face_analysis.prepare(ctx_id=ctx_id, det_size=(640, 640))
+                logger.info("Face analysis model loaded successfully")
+            except Exception as e:
+                logger.error(f"Failed to load face analysis with providers {providers}: {e}")
+                logger.info("Falling back to CPU-only execution")
+
+                self.face_analysis = FaceAnalysis(
+                    name='buffalo_l',
+                    providers=['CPUExecutionProvider']
+                )
+                self.face_analysis.prepare(ctx_id=-1, det_size=(640, 640))
+                logger.info("Face analysis model loaded successfully with CPU fallback")
+
         return self.face_analysis
 
     async def get_face_swapper(self):
         if self.face_swapper is None:
             logger.info("Loading InsightFace swapper model (inswapper_128.onnx)...")
+
+            providers = self._get_execution_providers()
+            logger.info(f"Face swapper using ONNX providers: {providers}")
+
             try:
                 self.face_swapper = insightface.model_zoo.get_model(
                     'inswapper_128.onnx',
                     download=True,
-                    download_zip=True
+                    download_zip=True,
+                    providers=providers
                 )
                 logger.info("Face swapper model loaded successfully")
             except Exception as e:
-                logger.error(f"Failed to load face swapper: {e}")
-                logger.info("Attempting alternative download method...")
-                model_path = self.models_dir / 'inswapper_128.onnx'
-                if model_path.exists():
-                    self.face_swapper = insightface.model_zoo.get_model(str(model_path))
-                else:
-                    raise Exception("Could not load face swapper model. Please download manually.")
+                logger.error(f"Failed to load face swapper with providers {providers}: {e}")
+
+                try:
+                    logger.info("Falling back to CPU-only execution for face swapper")
+                    self.face_swapper = insightface.model_zoo.get_model(
+                        'inswapper_128.onnx',
+                        download=True,
+                        download_zip=True,
+                        providers=['CPUExecutionProvider']
+                    )
+                    logger.info("Face swapper model loaded successfully with CPU fallback")
+                except Exception as e2:
+                    logger.error(f"CPU fallback also failed: {e2}")
+                    logger.info("Attempting to load from local file...")
+                    model_path = self.models_dir / 'inswapper_128.onnx'
+                    if model_path.exists():
+                        self.face_swapper = insightface.model_zoo.get_model(
+                            str(model_path),
+                            providers=['CPUExecutionProvider']
+                        )
+                        logger.info("Face swapper loaded from local file")
+                    else:
+                        raise Exception("Could not load face swapper model. Please download manually.")
+
         return self.face_swapper
 
     async def get_gfpgan_restorer(self) -> GFPGANer:
