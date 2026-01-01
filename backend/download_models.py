@@ -50,14 +50,32 @@ def download_insightface_models():
             swapper = insightface.model_zoo.get_model(
                 'inswapper_128.onnx',
                 download=True,
-                download_zip=True,
-                providers=['CPUExecutionProvider']
+                download_zip=False,
+                providers=['CPUExecutionProvider'],
+                root=str(models_dir)
             )
             logger.info("Inswapper model downloaded successfully!")
         except Exception as e:
-            logger.error(f"Failed to download inswapper: {e}")
-            logger.error("You may need to download manually from:")
-            logger.error("https://github.com/deepinsight/insightface/releases/download/v0.7/inswapper_128.onnx")
+            logger.error(f"Failed to download inswapper automatically: {e}")
+            logger.error("")
+            logger.error("=" * 60)
+            logger.error("MANUAL DOWNLOAD REQUIRED")
+            logger.error("=" * 60)
+            logger.error("")
+            logger.error("The inswapper_128.onnx model needs to be downloaded manually.")
+            logger.error("")
+            logger.error("Option 1 - Download from Google Drive:")
+            logger.error("  1. Visit: https://drive.google.com/file/d/1HvZ4MAtzlY74Dk4ASGIS9L6Rg5oZdqvu/view")
+            logger.error("  2. Download inswapper_128.onnx")
+            logger.error(f"  3. Place it in: {models_dir}/")
+            logger.error("")
+            logger.error("Option 2 - Download from Hugging Face:")
+            logger.error("  1. Visit: https://huggingface.co/deepinsight/inswapper/tree/main")
+            logger.error("  2. Download inswapper_128.onnx")
+            logger.error(f"  3. Place it in: {models_dir}/")
+            logger.error("")
+            logger.error("After manual download, restart the backend server.")
+            logger.error("=" * 60)
             return False
 
         logger.info("")
@@ -89,25 +107,52 @@ def verify_models():
     models_dir = backend_dir / 'models'
 
     logger.info("Verifying model files...")
+    logger.info(f"Models directory: {models_dir}")
+    logger.info("")
+
+    all_found = True
 
     buffalo_path = models_dir / 'models' / 'buffalo_l'
     if buffalo_path.exists():
-        logger.info(f"✓ Buffalo_l models found at: {buffalo_path}")
         model_files = list(buffalo_path.glob('*.onnx'))
-        logger.info(f"  Found {len(model_files)} ONNX model files")
+        logger.info(f"✓ Buffalo_l models found at: {buffalo_path}")
+        logger.info(f"  Found {len(model_files)} ONNX model files:")
+        for f in model_files:
+            logger.info(f"    - {f.name}")
     else:
         logger.warning(f"✗ Buffalo_l models NOT found at: {buffalo_path}")
-        return False
+        logger.warning("  Run: python download_models.py")
+        all_found = False
 
-    inswapper_files = list(models_dir.glob('**/inswapper_128.onnx'))
-    if inswapper_files:
-        logger.info(f"✓ Inswapper model found at: {inswapper_files[0]}")
+    logger.info("")
+
+    inswapper_path = models_dir / 'inswapper_128.onnx'
+    if inswapper_path.exists():
+        size_mb = inswapper_path.stat().st_size / (1024 * 1024)
+        logger.info(f"✓ Inswapper model found at: {inswapper_path}")
+        logger.info(f"  Size: {size_mb:.2f} MB")
     else:
-        logger.warning("✗ Inswapper model NOT found")
-        return False
+        logger.warning(f"✗ Inswapper model NOT found at: {inswapper_path}")
+        logger.warning("  Download manually from:")
+        logger.warning("    Google Drive: https://drive.google.com/file/d/1HvZ4MAtzlY74Dk4ASGIS9L6Rg5oZdqvu/view")
+        logger.warning("    OR")
+        logger.warning("    Hugging Face: https://huggingface.co/deepinsight/inswapper/tree/main")
+        logger.warning(f"  Place it in: {models_dir}/")
+        all_found = False
 
-    logger.info("All models verified successfully!")
-    return True
+    logger.info("")
+
+    if all_found:
+        logger.info("=" * 60)
+        logger.info("All required models verified successfully!")
+        logger.info("=" * 60)
+        logger.info("You can now start the backend server.")
+    else:
+        logger.warning("=" * 60)
+        logger.warning("Some models are missing. Please download them first.")
+        logger.warning("=" * 60)
+
+    return all_found
 
 if __name__ == "__main__":
     logger.info("Starting model download process...")

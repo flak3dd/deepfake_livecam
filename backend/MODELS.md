@@ -231,13 +231,31 @@ restorer = await model_manager.get_gfpgan_restorer()
 
 ## Model Download Process
 
+### Quick Start: Using the Download Script
+
+**Recommended method:**
+
+```bash
+cd backend
+python download_models.py
+```
+
+This attempts to download all models automatically. For the inswapper model, manual download may be required.
+
+**Verify models:**
+
+```bash
+python download_models.py --verify
+```
+
 ### Automatic Download
 
 Models download automatically on first API call:
 
-1. InsightFace models: Downloaded by InsightFace library
-2. GFPGAN: Downloaded by GFPGAN library from GitHub releases
-3. RealESRGAN: Downloaded by RealESRGAN library
+1. **Buffalo_l**: Downloaded by InsightFace library (~1.5 GB)
+2. **Inswapper**: Often fails due to GitHub restrictions - use manual method
+3. **GFPGAN**: Downloaded by GFPGAN library from GitHub (~350 MB)
+4. **RealESRGAN**: Downloaded by RealESRGAN library (~67 MB)
 
 ### Download Locations
 
@@ -245,30 +263,96 @@ Models download automatically on first API call:
 project-root/
 └── backend/
     └── models/
-        ├── buffalo_l/
-        │   ├── det_10g.onnx
-        │   ├── w600k_r50.onnx
-        │   └── 2d106det.onnx
-        ├── inswapper_128.onnx
-        ├── GFPGANv1.4.pth
-        └── RealESRGAN_x2plus.pth
+        ├── models/
+        │   └── buffalo_l/
+        │       ├── det_10g.onnx
+        │       ├── w600k_r50.onnx
+        │       ├── 2d106det.onnx
+        │       ├── 1k3d68.onnx
+        │       └── genderage.onnx
+        ├── inswapper_128.onnx      (536 MB)
+        ├── GFPGANv1.4.pth           (350 MB)
+        └── RealESRGAN_x2plus.pth    (67 MB)
 ```
 
-### Manual Download
+### Manual Download (Recommended for Inswapper)
+
+#### Inswapper_128.onnx (REQUIRED - Often needs manual download)
+
+**Option 1 - Google Drive (Fastest):**
+1. Visit: https://drive.google.com/file/d/1HvZ4MAtzlY74Dk4ASGIS9L6Rg5oZdqvu/view
+2. Click "Download" button
+3. Save file as `inswapper_128.onnx` (536 MB)
+4. Place in: `backend/models/inswapper_128.onnx`
+
+**Option 2 - Hugging Face:**
+1. Visit: https://huggingface.co/deepinsight/inswapper/tree/main
+2. Click on `inswapper_128.onnx`
+3. Click "Download" button
+4. Place in: `backend/models/inswapper_128.onnx`
+
+**Option 3 - GitHub Releases (may fail):**
+1. Visit: https://github.com/deepinsight/insightface/releases/tag/v0.7
+2. Download `inswapper_128.onnx`
+3. Place in: `backend/models/inswapper_128.onnx`
+
+#### Buffalo_l Models (Usually auto-downloads)
 
 If automatic download fails:
 
-#### InsightFace Models
-1. Download from: https://github.com/deepinsight/insightface/releases
-2. Place in: `backend/models/buffalo_l/`
+1. Download: https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip
+2. Extract the ZIP file
+3. Place extracted `buffalo_l` folder in: `backend/models/models/buffalo_l/`
+4. Should contain 5 ONNX files: `det_10g.onnx`, `w600k_r50.onnx`, `2d106det.onnx`, `1k3d68.onnx`, `genderage.onnx`
 
-#### GFPGAN
+#### GFPGAN (Usually auto-downloads)
+
+If automatic download fails:
+
 1. Download: https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.4.pth
-2. Place in: `backend/models/`
+2. Place in: `backend/models/GFPGANv1.4.pth`
 
-#### RealESRGAN
+#### RealESRGAN (Optional - Usually auto-downloads)
+
+If automatic download fails:
+
 1. Download: https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.1/RealESRGAN_x2plus.pth
-2. Place in: `backend/models/`
+2. Place in: `backend/models/RealESRGAN_x2plus.pth`
+
+### Common Download Issues
+
+#### "AssertionError: 'detection' not in models"
+
+**Cause:** Buffalo_l models not downloaded
+
+**Solution:**
+```bash
+python download_models.py
+```
+
+Or download manually from the buffalo_l link above.
+
+#### "RuntimeError: Failed downloading url"
+
+**Cause:** GitHub download restrictions or network issues
+
+**Solution:** Use manual download, especially for inswapper model (Google Drive or Hugging Face)
+
+#### "Could not load face swapper model"
+
+**Cause:** inswapper_128.onnx not found or corrupted
+
+**Solution:** Download manually from Google Drive or Hugging Face (see above)
+
+### Total Download Sizes
+
+- **Buffalo_l**: ~1.5 GB
+- **Inswapper**: 536 MB
+- **GFPGAN**: 350 MB (optional but recommended)
+- **RealESRGAN**: 67 MB (optional)
+
+**Total Required**: ~2 GB
+**Total With Enhancements**: ~2.5 GB
 
 ## Performance Optimization
 

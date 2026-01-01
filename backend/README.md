@@ -183,25 +183,33 @@ Models are downloaded automatically on first run:
 
 **First run may take several minutes** to download all models (~2GB total).
 
-### Manual Download (If Automatic Fails)
+### Manual Download (Recommended for Inswapper)
 
-If models don't download automatically, use the download script:
+The inswapper model often requires manual download due to GitHub restrictions.
+
+**Quick fix for inswapper model:**
+1. Download from Google Drive: https://drive.google.com/file/d/1HvZ4MAtzlY74Dk4ASGIS9L6Rg5oZdqvu/view
+2. Save as `inswapper_128.onnx` (536 MB)
+3. Place in `backend/models/inswapper_128.onnx`
+
+**Or use the download script:**
 
 ```bash
 cd backend
 python download_models.py
 ```
 
-To verify models are installed:
+The script will attempt to download buffalo_l automatically and provide instructions for inswapper.
+
+**Verify models:**
 ```bash
 python download_models.py --verify
 ```
 
-The script will:
-- Download all required InsightFace models
-- Verify model integrity
-- Show download progress
-- Provide manual download links if needed
+**For detailed download instructions, see:**
+- [MODELS.md](MODELS.md) - Comprehensive model download guide
+- All download links (Google Drive, Hugging Face, GitHub)
+- Troubleshooting for specific models
 
 ## Docker Deployment
 

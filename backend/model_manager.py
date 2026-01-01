@@ -136,41 +136,74 @@ class ModelManager:
         if self.face_swapper is None:
             logger.info("Loading InsightFace swapper model (inswapper_128.onnx)...")
 
+            model_path = self.models_dir / 'inswapper_128.onnx'
+
+            if model_path.exists():
+                logger.info(f"Found local model at: {model_path}")
+                try:
+                    providers = self._get_execution_providers()
+                    self.face_swapper = insightface.model_zoo.get_model(
+                        str(model_path),
+                        providers=providers
+                    )
+                    logger.info("Face swapper model loaded successfully from local file")
+                    return self.face_swapper
+                except Exception as e:
+                    logger.error(f"Failed to load local model: {e}")
+
             providers = self._get_execution_providers()
+            logger.info(f"Attempting to download inswapper_128.onnx...")
             logger.info(f"Face swapper using ONNX providers: {providers}")
 
             try:
                 self.face_swapper = insightface.model_zoo.get_model(
                     'inswapper_128.onnx',
                     download=True,
-                    download_zip=True,
-                    providers=providers
+                    download_zip=False,
+                    providers=providers,
+                    root=str(self.models_dir)
                 )
-                logger.info("Face swapper model loaded successfully")
+                logger.info("Face swapper model downloaded and loaded successfully")
             except Exception as e:
-                logger.error(f"Failed to load face swapper with providers {providers}: {e}")
+                logger.error(f"Failed to download face swapper: {e}")
 
                 try:
-                    logger.info("Falling back to CPU-only execution for face swapper")
+                    logger.info("Trying with CPU provider and download_zip=True...")
                     self.face_swapper = insightface.model_zoo.get_model(
                         'inswapper_128.onnx',
                         download=True,
                         download_zip=True,
-                        providers=['CPUExecutionProvider']
+                        providers=['CPUExecutionProvider'],
+                        root=str(self.models_dir)
                     )
                     logger.info("Face swapper model loaded successfully with CPU fallback")
                 except Exception as e2:
-                    logger.error(f"CPU fallback also failed: {e2}")
-                    logger.info("Attempting to load from local file...")
-                    model_path = self.models_dir / 'inswapper_128.onnx'
-                    if model_path.exists():
-                        self.face_swapper = insightface.model_zoo.get_model(
-                            str(model_path),
-                            providers=['CPUExecutionProvider']
-                        )
-                        logger.info("Face swapper loaded from local file")
-                    else:
-                        raise Exception("Could not load face swapper model. Please download manually.")
+                    logger.error(f"All automatic download attempts failed: {e2}")
+                    logger.error("")
+                    logger.error("=" * 60)
+                    logger.error("MANUAL DOWNLOAD REQUIRED")
+                    logger.error("=" * 60)
+                    logger.error("")
+                    logger.error("The inswapper_128.onnx model must be downloaded manually.")
+                    logger.error("")
+                    logger.error("Option 1 - Run download script:")
+                    logger.error("  python download_models.py")
+                    logger.error("")
+                    logger.error("Option 2 - Download from Google Drive:")
+                    logger.error("  1. Visit: https://drive.google.com/file/d/1HvZ4MAtzlY74Dk4ASGIS9L6Rg5oZdqvu/view")
+                    logger.error("  2. Download inswapper_128.onnx (~536 MB)")
+                    logger.error(f"  3. Place it in: {self.models_dir}/")
+                    logger.error("")
+                    logger.error("Option 3 - Download from Hugging Face:")
+                    logger.error("  1. Visit: https://huggingface.co/deepinsight/inswapper/tree/main")
+                    logger.error("  2. Download inswapper_128.onnx")
+                    logger.error(f"  3. Place it in: {self.models_dir}/")
+                    logger.error("")
+                    logger.error("After downloading, restart the backend server.")
+                    logger.error("=" * 60)
+                    raise Exception(
+                        f"Could not load face swapper model. Please download manually to {self.models_dir}/"
+                    )
 
         return self.face_swapper
 

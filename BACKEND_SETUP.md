@@ -64,7 +64,14 @@ pip install -r requirements.txt
 python main.py
 ```
 
-**Note:** First run will download models (~850MB total). This may take 5-10 minutes.
+**Note:** First run will download models (~2GB total). This may take 5-15 minutes.
+
+**IMPORTANT:** The inswapper model often fails to download automatically. If you see an error about "Failed downloading inswapper_128.onnx", download it manually:
+
+1. Visit: https://drive.google.com/file/d/1HvZ4MAtzlY74Dk4ASGIS9L6Rg5oZdqvu/view
+2. Download inswapper_128.onnx (536 MB)
+3. Place in `backend/models/inswapper_128.onnx`
+4. Restart the backend
 
 The backend will start at `http://localhost:8000`
 
@@ -156,24 +163,42 @@ docker-compose down
 
 ## Model Download Details
 
-Models download automatically on first run:
+Models download automatically on first run (with some exceptions):
 
-### 1. InsightFace Models (~400MB)
-- Location: `~/.insightface/models/`
-- buffalo_l detection model (face detection + landmarks)
-- inswapper_128.onnx (face swapping model)
+### 1. InsightFace Models (~2GB)
+- **Location:** `backend/models/`
+- **Buffalo_l** (face detection + landmarks): ~1.5 GB - usually auto-downloads
+- **Inswapper_128.onnx** (face swapping): 536 MB - often requires manual download
 
 ### 2. GFPGAN v1.4 (~350MB)
-- Location: `~/.cache/torch/hub/checkpoints/`
-- GFPGANv1.4.pth (face restoration)
+- **Location:** `~/.cache/torch/hub/checkpoints/` or `backend/models/`
+- GFPGANv1.4.pth (face restoration) - usually auto-downloads
 
 ### 3. RealESRGAN (~67MB, optional)
 - For background enhancement
-- RealESRGAN_x2plus.pth
+- RealESRGAN_x2plus.pth - usually auto-downloads
+
+**Download Helper Script:**
+```bash
+cd backend
+python download_models.py  # Attempts automatic download
+python download_models.py --verify  # Checks which models are present
+```
+
+**Manual Download (if needed):**
+
+For inswapper_128.onnx (most common issue):
+- Google Drive: https://drive.google.com/file/d/1HvZ4MAtzlY74Dk4ASGIS9L6Rg5oZdqvu/view
+- Hugging Face: https://huggingface.co/deepinsight/inswapper/tree/main
+- Place in: `backend/models/inswapper_128.onnx`
+
+For complete download guide with all links:
+- See `backend/MODELS.md`
 
 **First run timing:**
-- CPU: 5-10 minutes (download + initialization)
-- GPU: 3-5 minutes
+- With manual inswapper download: 2-5 minutes
+- With automatic downloads: 5-15 minutes (if successful)
+- GPU: Slightly faster initialization
 
 ## API Testing
 
@@ -243,7 +268,46 @@ curl -X POST http://localhost:8000/api/face-restore \
 
 ## Troubleshooting
 
-### Models Not Downloading
+### AssertionError: 'detection' not in models
+
+**Symptoms:**
+```
+AssertionError: assert 'detection' in self.models
+```
+
+**Cause:** Buffalo_l models not downloaded
+
+**Solution:**
+```bash
+cd backend
+python download_models.py
+```
+
+If that fails, download manually:
+- Visit: https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip
+- Extract to `backend/models/models/buffalo_l/`
+
+### RuntimeError: Failed downloading inswapper_128.onnx
+
+**Symptoms:**
+```
+RuntimeError: Failed downloading url https://github.com/.../inswapper_128.onnx.zip
+```
+
+**Cause:** GitHub download restrictions (common issue)
+
+**Solution:**
+Download manually from Google Drive (fastest):
+1. Visit: https://drive.google.com/file/d/1HvZ4MAtzlY74Dk4ASGIS9L6Rg5oZdqvu/view
+2. Download inswapper_128.onnx (536 MB)
+3. Place in `backend/models/inswapper_128.onnx`
+4. Restart backend: `python main.py`
+
+Alternative: Hugging Face
+- Visit: https://huggingface.co/deepinsight/inswapper/tree/main
+- Download inswapper_128.onnx
+
+### Models Not Downloading (General)
 
 **Symptoms:**
 - Errors about missing models
@@ -251,11 +315,10 @@ curl -X POST http://localhost:8000/api/face-restore \
 
 **Solutions:**
 1. Check internet connection
-2. Verify firewall allows downloads
-3. Check disk space (need ~1GB free)
-4. Manual download:
-   - InsightFace: https://github.com/deepinsight/insightface
-   - GFPGAN: https://github.com/TencentARC/GFPGAN/releases
+2. Verify firewall allows downloads from GitHub
+3. Check disk space (need ~3GB free)
+4. Use download script: `python download_models.py`
+5. Manual download (see MODELS.md for all links)
 
 ### Import Errors
 
