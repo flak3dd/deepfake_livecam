@@ -49,7 +49,14 @@ High-performance Python backend for face swapping and restoration using state-of
 
 - Python 3.10+
 - 4GB+ RAM (8GB+ recommended)
-- GPU with CUDA support (optional, but recommended for GFPGAN)
+- GPU with CUDA support (optional, but 2-5x faster)
+
+## Quick Setup Guides
+
+- **Windows Users:** [WINDOWS_SETUP_QUICK_REFERENCE.md](WINDOWS_SETUP_QUICK_REFERENCE.md) - Choose CPU or GPU setup
+- **Windows GPU Setup:** [WINDOWS_GPU_SETUP.md](WINDOWS_GPU_SETUP.md) - Complete CUDA installation guide
+- **Model Downloads:** [QUICK_START.md](QUICK_START.md) - Fix model download issues
+- **Apple Silicon:** [APPLE_SILICON_SETUP.md](APPLE_SILICON_SETUP.md) - Mac M1/M2/M3 setup
 
 ## Installation
 
@@ -65,14 +72,24 @@ python main.py
 
 ### GPU Installation (NVIDIA CUDA)
 
-For better performance with GFPGAN:
+For 2-5x better performance with GPU acceleration:
 
+**Windows Users:**
+See [WINDOWS_GPU_SETUP.md](WINDOWS_GPU_SETUP.md) for complete CUDA installation guide.
+
+**Quick setup (if CUDA already installed):**
+```cmd
+cd backend
+setup_gpu.bat
+```
+
+**Linux/Mac:**
 ```bash
 cd backend
 python -m venv venv
 source venv/bin/activate
 
-# Install PyTorch with CUDA
+# Install PyTorch with CUDA 11.8
 pip install torch==2.1.2 torchvision==0.16.2 --index-url https://download.pytorch.org/whl/cu118
 
 # Install other requirements
@@ -80,6 +97,12 @@ pip install -r requirements.txt
 
 python main.py
 ```
+
+**Requirements:**
+- NVIDIA GPU (GTX 900 series or newer, RTX series recommended)
+- CUDA Toolkit 11.8 - [Download](https://developer.nvidia.com/cuda-11-8-0-download-archive)
+- Updated NVIDIA drivers
+- 4GB+ VRAM (6GB+ recommended)
 
 ## API Endpoints
 

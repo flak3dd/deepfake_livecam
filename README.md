@@ -90,6 +90,33 @@ python main.py
 
 The backend API will be available at `http://localhost:8000`
 
+**For detailed setup instructions, see:**
+- [BACKEND_SETUP.md](BACKEND_SETUP.md) - Complete backend setup guide
+- [backend/QUICK_START.md](backend/QUICK_START.md) - Quick model download guide
+- [backend/WINDOWS_GPU_SETUP.md](backend/WINDOWS_GPU_SETUP.md) - Windows GPU acceleration setup
+
+#### GPU Acceleration (Recommended)
+
+For 2-5x faster processing, enable GPU acceleration:
+
+**Windows with NVIDIA GPU:**
+```cmd
+cd backend
+setup_gpu.bat
+```
+See [backend/WINDOWS_GPU_SETUP.md](backend/WINDOWS_GPU_SETUP.md) for complete CUDA setup instructions.
+
+**Linux with NVIDIA GPU:**
+```bash
+cd backend
+pip install torch==2.1.2 torchvision==0.16.2 --index-url https://download.pytorch.org/whl/cu118
+```
+
+**Verify GPU support:**
+```bash
+python verify_gpu.py
+```
+
 #### Option 2: Docker Deployment
 
 1. Navigate to backend directory:

@@ -96,14 +96,34 @@ You should see all models loaded successfully.
 
 ## GPU Acceleration (Recommended)
 
-For 2-5x faster processing with GFPGAN:
+For 2-5x faster processing with GFPGAN and face swapping.
 
-### NVIDIA GPU Setup
+### Windows GPU Setup
 
+**For Windows users with NVIDIA GPUs, see the comprehensive guide:**
+[backend/WINDOWS_GPU_SETUP.md](backend/WINDOWS_GPU_SETUP.md)
+
+**The guide covers:**
+- Checking GPU compatibility
+- Installing CUDA Toolkit 11.8
+- Installing cuDNN (optional)
+- Setting up PyTorch with CUDA
+- Troubleshooting common issues
+- Performance optimization
+
+**Quick automated setup (if CUDA already installed):**
+```cmd
+cd backend
+setup_gpu.bat
+```
+
+### Linux/Mac GPU Setup
+
+**NVIDIA GPU with CUDA:**
 ```bash
 cd backend
 python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+source venv/bin/activate
 
 # Install PyTorch with CUDA 11.8
 pip install torch==2.1.2 torchvision==0.16.2 --index-url https://download.pytorch.org/whl/cu118
@@ -114,12 +134,24 @@ pip install -r requirements.txt
 python main.py
 ```
 
+**Apple Silicon (M1/M2/M3):**
+See [backend/APPLE_SILICON_SETUP.md](backend/APPLE_SILICON_SETUP.md) for Metal acceleration.
+
+### Verify GPU Support
+
 Check if CUDA is working:
 ```bash
 curl http://localhost:8000/health
 ```
 
-Look for `"cuda_available": true`
+Look for:
+```json
+{
+  "cuda_available": true,
+  "device": "cuda",
+  "gpu_name": "NVIDIA GeForce RTX 3080"
+}
+```
 
 ## Using Docker (Recommended for Production)
 
