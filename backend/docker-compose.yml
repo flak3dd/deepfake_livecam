@@ -7,7 +7,7 @@ services:
       - "8000:8000"
     environment:
       - PYTHONUNBUFFERED=1
-      - INSIGHTFACE_ROOT=/app/public/models
+      - INSIGHTFACE_ROOT=/app/backend/models
     volumes:
-      - ../public/models:/app/public/models
+      - ./models:/app/backend/models
     restart: unless-stopped

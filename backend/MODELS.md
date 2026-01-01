@@ -41,7 +41,7 @@ The backend integrates multiple state-of-the-art AI models for professional face
 
 **Download Location:**
 ```
-public/models/buffalo_l/
+backend/models/buffalo_l/
 ├── det_10g.onnx        # Face detector
 ├── w600k_r50.onnx      # Face recognition
 └── 2d106det.onnx       # Landmark detector
@@ -84,7 +84,7 @@ public/models/buffalo_l/
 
 **Download Location:**
 ```
-public/models/inswapper_128.onnx
+backend/models/inswapper_128.onnx
 ```
 
 ### 3. GFPGAN v1.4
@@ -138,7 +138,7 @@ public/models/inswapper_128.onnx
 
 **Download Location:**
 ```
-public/models/GFPGANv1.4.pth
+backend/models/GFPGANv1.4.pth
 ```
 
 ### 4. RealESRGAN
@@ -169,7 +169,7 @@ public/models/GFPGANv1.4.pth
 
 **Download Location:**
 ```
-public/models/RealESRGAN_x2plus.pth
+backend/models/RealESRGAN_x2plus.pth
 ```
 
 ## Runtime Frameworks
@@ -243,7 +243,7 @@ Models download automatically on first API call:
 
 ```
 project-root/
-└── public/
+└── backend/
     └── models/
         ├── buffalo_l/
         │   ├── det_10g.onnx
@@ -260,15 +260,15 @@ If automatic download fails:
 
 #### InsightFace Models
 1. Download from: https://github.com/deepinsight/insightface/releases
-2. Place in: `public/models/buffalo_l/`
+2. Place in: `backend/models/buffalo_l/`
 
 #### GFPGAN
 1. Download: https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.4.pth
-2. Place in: `public/models/`
+2. Place in: `backend/models/`
 
 #### RealESRGAN
 1. Download: https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.1/RealESRGAN_x2plus.pth
-2. Place in: `public/models/`
+2. Place in: `backend/models/`
 
 ## Performance Optimization
 

@@ -167,7 +167,7 @@ Optimized endpoint for real-time video processing.
 Models are downloaded automatically on first run:
 
 1. **InsightFace models** (~400MB)
-   - Downloaded to `public/models/`
+   - Downloaded to `backend/models/`
    - buffalo_l detection model
    - inswapper_128.onnx face swapping model
 

@@ -25,8 +25,7 @@ class ModelManager:
             return
 
         backend_dir = Path(__file__).parent
-        project_root = backend_dir.parent
-        self.models_dir = project_root / 'public' / 'models'
+        self.models_dir = backend_dir / 'models'
         self.models_dir.mkdir(parents=True, exist_ok=True)
 
         os.environ['INSIGHTFACE_ROOT'] = str(self.models_dir)
