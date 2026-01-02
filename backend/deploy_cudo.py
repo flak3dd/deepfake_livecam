@@ -85,17 +85,20 @@ set -e
 
 echo "Installing Docker and NVIDIA Docker support..."
 apt-get update
-apt-get install -y docker.io nvidia-docker2
+apt-get install -y docker.io nvidia-docker2 curl
 systemctl restart docker
 
 echo "Pulling Docker image: {image_name}"
 docker pull {image_name}
 
-echo "Starting face swap backend..."
+echo "Starting face swap backend with persistent restart policy..."
 docker run -d \\
   --name face-swap-backend \\
   --gpus all \\
   --restart unless-stopped \\
+  --log-driver json-file \\
+  --log-opt max-size=10m \\
+  --log-opt max-file=3 \\
   -p 8000:8000 \\
   -v /data/models:/app/models \\
   {image_name}
@@ -106,7 +109,7 @@ sleep 30
 echo "Running health check..."
 curl -f http://localhost:8000/health || echo "Warning: Health check failed"
 
-echo "Deployment complete! Backend is running on port 8000"
+echo "Deployment complete! Backend is running with auto-restart enabled."
 """
 
 def deploy_to_cudo(api_key: str, config: dict) -> Optional[dict]:

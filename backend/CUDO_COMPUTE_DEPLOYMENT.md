@@ -132,6 +132,33 @@ done
 2. **Auto-shutdown**: Stop instances during low usage periods
 3. **Right-sizing**: Start with RTX 3090 and scale as needed
 
+## Persistent Startup Configuration
+
+The deployment scripts automatically configure Docker with the `--restart unless-stopped` policy, ensuring your backend:
+- Starts automatically on VM boot
+- Restarts after crashes
+- Persists across VM reboots
+
+For advanced persistence options including systemd services and health monitoring, see [CUDO_PERSISTENT_STARTUP.md](CUDO_PERSISTENT_STARTUP.md).
+
+### Quick Verification
+
+After deployment, verify persistence:
+
+```bash
+# SSH into your instance
+ssh ubuntu@your-instance-ip
+
+# Check Docker restart policy
+docker inspect face-swap-backend | grep -A 5 RestartPolicy
+
+# Test by rebooting
+sudo reboot
+
+# After reboot, verify container is running
+docker ps
+```
+
 ## Security Best Practices
 
 1. **API Authentication**: Always require API keys for backend access

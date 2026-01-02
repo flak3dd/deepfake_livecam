@@ -52,7 +52,19 @@ The script will:
 4. Configure GPU and networking
 5. Provide instance IP
 
-### Step 4: Configure Frontend
+### Step 4: Verify Persistence
+
+The backend automatically restarts on crashes and VM reboots:
+
+```bash
+# SSH into instance
+ssh ubuntu@YOUR-CUDO-IP
+
+# Verify restart policy
+docker inspect face-swap-backend | grep RestartPolicy
+```
+
+### Step 5: Configure Frontend
 
 After deployment, update your Supabase Edge Function:
 
@@ -152,9 +164,24 @@ df -h
 docker exec -it face-swap-backend python download_models.py
 ```
 
+## Persistence & Auto-Restart
+
+The deployment automatically configures:
+- Docker `--restart unless-stopped` policy
+- Auto-start on VM boot
+- Auto-restart on crashes
+- Log rotation (10MB max, 3 files)
+
+**Advanced Options**: See [backend/CUDO_PERSISTENT_STARTUP.md](backend/CUDO_PERSISTENT_STARTUP.md) for:
+- Systemd service configuration
+- Health monitoring scripts
+- Custom restart policies
+- Advanced troubleshooting
+
 ## Complete Documentation
 
 - **Full Guide**: [backend/CUDO_COMPUTE_DEPLOYMENT.md](backend/CUDO_COMPUTE_DEPLOYMENT.md)
+- **Persistence Setup**: [backend/CUDO_PERSISTENT_STARTUP.md](backend/CUDO_PERSISTENT_STARTUP.md)
 - **API Reference**: https://www.cudocompute.com/docs/rest-api/introduction
 - **Cudo Docs**: https://www.cudocompute.com/docs
 
