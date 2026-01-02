@@ -53,11 +53,17 @@ High-performance Python backend for face swapping and restoration using state-of
 
 ## Quick Setup Guides
 
+### Cloud Deployment (Production - Easiest)
+- **Cudo Compute Startup Script:** [CUDO_STARTUP_SCRIPT_GUIDE.md](CUDO_STARTUP_SCRIPT_GUIDE.md) - Deploy with one script paste (RECOMMENDED)
+- **Cudo Compute Guide:** [CUDO_COMPUTE_DEPLOYMENT.md](CUDO_COMPUTE_DEPLOYMENT.md) - Full cloud GPU deployment
+- **Persistence Setup:** [CUDO_PERSISTENT_STARTUP.md](CUDO_PERSISTENT_STARTUP.md) - Auto-restart configuration
+
+### Local Development
 - **Windows Users:** [WINDOWS_SETUP_QUICK_REFERENCE.md](WINDOWS_SETUP_QUICK_REFERENCE.md) - Choose CPU or GPU setup
 - **Windows GPU Setup:** [WINDOWS_GPU_SETUP.md](WINDOWS_GPU_SETUP.md) - Complete CUDA installation guide
+- **Apple Silicon:** [APPLE_SILICON_SETUP.md](APPLE_SILICON_SETUP.md) - Mac M1/M2/M3 setup
 - **Model Downloads:** [QUICK_START.md](QUICK_START.md) - Fix model download issues
 - **Dependency Guide:** [DEPENDENCY_COMPATIBILITY.md](DEPENDENCY_COMPATIBILITY.md) - Version compatibility & troubleshooting
-- **Apple Silicon:** [APPLE_SILICON_SETUP.md](APPLE_SILICON_SETUP.md) - Mac M1/M2/M3 setup
 
 ## Verification Tools
 

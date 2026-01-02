@@ -65,7 +65,23 @@ The app will be available at `http://localhost:5173`
 
 The Python backend provides advanced face swapping capabilities using InsightFace.
 
-#### Option 1: Local Development
+#### Option 1: Cloud Deployment (Easiest - Production Ready)
+
+Deploy to Cudo Compute with GPU acceleration in 5 minutes:
+
+1. Go to https://compute.cudo.org/?create=virtual-machine
+2. Select **Ubuntu 22.04** + **GPU instance** (RTX 3090 recommended)
+3. Copy the startup script from [backend/STARTUP_SCRIPT_COPY_PASTE.md](backend/STARTUP_SCRIPT_COPY_PASTE.md)
+4. Paste into **"Startup Script"** section
+5. Replace `your-username/face-swap-backend:latest` with your Docker image
+6. Click **"Create"**
+
+**Complete guides:**
+- [backend/STARTUP_SCRIPT_COPY_PASTE.md](backend/STARTUP_SCRIPT_COPY_PASTE.md) - Quick copy-paste script
+- [backend/CUDO_STARTUP_SCRIPT_GUIDE.md](backend/CUDO_STARTUP_SCRIPT_GUIDE.md) - Full deployment guide
+- [CUDO_QUICK_START.md](CUDO_QUICK_START.md) - Cudo Compute overview
+
+#### Option 2: Local Development
 
 1. Navigate to backend directory:
 ```bash
@@ -117,7 +133,7 @@ pip install torch==2.1.2 torchvision==0.16.2 --index-url https://download.pytorc
 python verify_gpu.py
 ```
 
-#### Option 2: Docker Deployment
+#### Option 3: Docker Deployment (Local)
 
 1. Navigate to backend directory:
 ```bash

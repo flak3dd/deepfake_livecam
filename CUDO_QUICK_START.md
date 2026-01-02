@@ -16,18 +16,38 @@ Cudo Compute is a cloud GPU platform that provides cost-effective GPU instances 
 - **Scalable**: Start small, scale as needed
 - **Flexible**: RTX 3090, RTX 4090, A100 options
 
-## Quick Deployment
+## Deployment Options
 
-### Step 1: Get API Key
+### Option 1: Startup Script (Easiest - Recommended)
 
-1. Create account at https://compute.cudo.org/
-2. Navigate to API Keys section
-3. Generate new API key
-4. Copy the key
+Use Cudo's built-in startup script feature - no API key or local setup required:
 
-### Step 2: Configure Deployment
+1. Go to https://compute.cudo.org/?create=virtual-machine
+2. Configure VM:
+   - **OS**: Ubuntu 22.04 LTS
+   - **Machine Type**: GPU instance (RTX 3090 recommended)
+   - **Storage**: 50GB minimum
+3. Scroll to **"Startup Script"** section
+4. Paste the script from [backend/CUDO_STARTUP_SCRIPT_GUIDE.md](backend/CUDO_STARTUP_SCRIPT_GUIDE.md)
+5. Replace `your-username/face-swap-backend:latest` with your Docker image
+6. Click **"Create"**
 
-Edit `backend/cudo-config.json`:
+**Advantages**:
+- No API key needed
+- No local setup required
+- Automatic installation
+- Runs on first boot
+- Perfect for beginners
+
+**See**: [backend/CUDO_STARTUP_SCRIPT_GUIDE.md](backend/CUDO_STARTUP_SCRIPT_GUIDE.md) for the complete script and detailed instructions.
+
+### Option 2: Automated Deployment Script
+
+Use the Python script for programmatic deployment:
+
+**Step 1**: Get API key from https://compute.cudo.org/
+
+**Step 2**: Configure `backend/cudo-config.json`:
 
 ```json
 {
@@ -37,7 +57,7 @@ Edit `backend/cudo-config.json`:
 }
 ```
 
-### Step 3: Deploy
+**Step 3**: Deploy
 
 ```bash
 cd backend
@@ -52,7 +72,9 @@ The script will:
 4. Configure GPU and networking
 5. Provide instance IP
 
-### Step 4: Verify Persistence
+## Post-Deployment Setup
+
+### Verify Persistence
 
 The backend automatically restarts on crashes and VM reboots:
 
@@ -64,7 +86,7 @@ ssh ubuntu@YOUR-CUDO-IP
 docker inspect face-swap-backend | grep RestartPolicy
 ```
 
-### Step 5: Configure Frontend
+### Configure Frontend
 
 After deployment, update your Supabase Edge Function:
 
@@ -180,14 +202,17 @@ The deployment automatically configures:
 
 ## Complete Documentation
 
-- **Full Guide**: [backend/CUDO_COMPUTE_DEPLOYMENT.md](backend/CUDO_COMPUTE_DEPLOYMENT.md)
-- **Persistence Setup**: [backend/CUDO_PERSISTENT_STARTUP.md](backend/CUDO_PERSISTENT_STARTUP.md)
+- **Startup Script Guide**: [backend/CUDO_STARTUP_SCRIPT_GUIDE.md](backend/CUDO_STARTUP_SCRIPT_GUIDE.md) - Easiest deployment method
+- **Persistence Setup**: [backend/CUDO_PERSISTENT_STARTUP.md](backend/CUDO_PERSISTENT_STARTUP.md) - Advanced auto-restart options
+- **Full Deployment Guide**: [backend/CUDO_COMPUTE_DEPLOYMENT.md](backend/CUDO_COMPUTE_DEPLOYMENT.md) - Complete reference
 - **API Reference**: https://www.cudocompute.com/docs/rest-api/introduction
 - **Cudo Docs**: https://www.cudocompute.com/docs
 
-## Deployment Scripts
+## Deployment Files
 
-- **Python Script**: `backend/deploy_cudo.py` (cross-platform)
+- **Startup Script**: `backend/cudo-startup-script.sh` (copy-paste ready)
+- **Startup Guide**: `backend/CUDO_STARTUP_SCRIPT_GUIDE.md` (complete instructions)
+- **Python Script**: `backend/deploy_cudo.py` (automated deployment)
 - **Bash Script**: `backend/deploy-cudo.sh` (Linux/Mac)
 - **Config File**: `backend/cudo-config.json`
 
