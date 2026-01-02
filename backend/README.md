@@ -53,6 +53,11 @@ High-performance Python backend for face swapping and restoration using state-of
 
 ## Quick Setup Guides
 
+### Docker Deployment (Recommended)
+- **GPU Quick Start:** [GPU_QUICK_START.md](GPU_QUICK_START.md) - 5-minute CUDA GPU deployment
+- **Complete GPU Guide:** [BUILD_GPU.md](BUILD_GPU.md) - Detailed NVIDIA GPU setup and optimization
+- **Docker Guide:** [README_DOCKER.md](README_DOCKER.md) - CPU vs GPU comparison and best practices
+
 ### Cloud Deployment (Production - Easiest)
 - **Cudo Compute Startup Script:** [CUDO_STARTUP_SCRIPT_GUIDE.md](CUDO_STARTUP_SCRIPT_GUIDE.md) - Deploy with one script paste (RECOMMENDED)
 - **Cudo Compute Guide:** [CUDO_COMPUTE_DEPLOYMENT.md](CUDO_COMPUTE_DEPLOYMENT.md) - Full cloud GPU deployment
@@ -101,7 +106,25 @@ See [REQUIREMENTS_UPDATE.md](REQUIREMENTS_UPDATE.md) for complete list with expl
 
 ## Installation
 
-### Quick Start (CPU Only)
+### Docker (Recommended for Production)
+
+**GPU (CUDA)** - 10-20x faster:
+```bash
+cd backend
+./build-gpu.sh rebuild
+```
+See [GPU_QUICK_START.md](GPU_QUICK_START.md) for detailed instructions.
+
+**CPU** - No GPU required:
+```bash
+cd backend
+docker-compose up --build
+```
+See [README_DOCKER.md](README_DOCKER.md) for complete Docker guide.
+
+### Python Virtual Environment
+
+#### Quick Start (CPU Only)
 
 ```bash
 cd backend
@@ -111,7 +134,7 @@ pip install -r requirements.txt
 python main.py
 ```
 
-### GPU Installation (NVIDIA CUDA)
+#### GPU Installation (NVIDIA CUDA)
 
 For 2-5x better performance with GPU acceleration:
 

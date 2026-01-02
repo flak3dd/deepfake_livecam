@@ -1,3 +1,4 @@
+# CPU-only version - For GPU acceleration, use Dockerfile.cuda
 FROM python:3.10-slim
 
 WORKDIR /app
