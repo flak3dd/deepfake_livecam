@@ -269,7 +269,52 @@ python download_models.py --verify
 - All download links (Google Drive, Hugging Face, GitHub)
 - Troubleshooting for specific models
 
-## Docker Deployment
+## Cloud GPU Deployment (Cudo Compute)
+
+Deploy to cloud GPUs for production use with cost-effective GPU instances.
+
+### Quick Deploy to Cudo Compute
+
+```bash
+cd backend
+
+# Set your Cudo API key
+export CUDO_API_KEY="your-api-key-here"
+
+# Deploy with one command
+chmod +x deploy-cudo.sh
+./deploy-cudo.sh
+```
+
+The script will:
+1. Build and push Docker image
+2. Deploy to Cudo Compute with GPU support
+3. Configure networking and firewall
+4. Provide the instance IP for configuration
+
+### Manual Configuration
+
+See [CUDO_COMPUTE_DEPLOYMENT.md](CUDO_COMPUTE_DEPLOYMENT.md) for detailed instructions including:
+- GPU instance selection (RTX 3090, RTX 4090, A100)
+- Cost optimization strategies
+- Monitoring and scaling
+- Security best practices
+
+### Connecting Frontend to Cloud Backend
+
+After deploying to Cudo Compute, configure Supabase Edge Function:
+
+```bash
+supabase secrets set FACE_PROCESSING_BACKEND_URL=http://YOUR-CUDO-IP:8000
+```
+
+Or update frontend environment:
+
+```env
+VITE_BACKEND_URL=http://YOUR-CUDO-IP:8000
+```
+
+## Docker Deployment (Local)
 
 ### Build and Run
 

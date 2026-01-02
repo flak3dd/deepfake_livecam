@@ -213,6 +213,26 @@ npm run build
 
 ### Backend Deployment
 
+#### Cloud GPU (Cudo Compute) - Recommended for Production
+
+Deploy to cost-effective cloud GPUs for 2-5x faster processing:
+
+```bash
+cd backend
+export CUDO_API_KEY="your-api-key"
+python deploy_cudo.py
+```
+
+Features:
+- GPU-accelerated processing (RTX 3090, RTX 4090, A100)
+- Automatic Docker deployment
+- $0.50-$4.00/hour based on GPU type
+- Easy scaling and monitoring
+
+**Documentation:** See [backend/CUDO_COMPUTE_DEPLOYMENT.md](backend/CUDO_COMPUTE_DEPLOYMENT.md)
+
+**Get Started:** Create account at https://compute.cudo.org/
+
 #### Cloud Run / App Engine
 ```bash
 gcloud run deploy face-processor --source .

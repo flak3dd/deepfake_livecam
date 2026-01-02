@@ -1,0 +1,24 @@
+{
+  "projectId": "your-project-id",
+  "machineType": "gpu-rtx3090",
+  "region": "us-east",
+  "diskSize": 50,
+  "dockerImage": "yourusername/face-swap-backend:latest",
+  "ports": [8000],
+  "environment": {
+    "MODEL_CACHE_DIR": "/app/models",
+    "MAX_WORKERS": "4",
+    "ENABLE_GPU": "true"
+  },
+  "gpuTypes": {
+    "budget": "gpu-rtx3090",
+    "performance": "gpu-rtx4090",
+    "enterprise": "gpu-a100"
+  },
+  "regions": {
+    "us-east": "United States East",
+    "us-west": "United States West",
+    "eu-west": "Europe West",
+    "asia-southeast": "Asia Southeast"
+  }
+}
