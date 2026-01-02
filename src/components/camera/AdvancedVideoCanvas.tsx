@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { applyFilter, FilterSettings } from '../lib/videoFilters';
+import { applyFilter, FilterSettings } from '../../lib/utils/videoFilters';
 import {
   FaceProcessingPipeline,
   ProcessingPipeline,
@@ -8,7 +8,7 @@ import {
   FaceEffectSettings,
   DetectedFace,
   DeepFaceLiveSettings,
-} from '../lib/faceProcessing';
+} from '../../lib/faceProcessing';
 
 interface AdvancedVideoCanvasProps {
   filter: FilterSettings;

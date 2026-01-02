@@ -1,16 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { AdvancedVideoCanvas } from './components/AdvancedVideoCanvas';
-import { CameraControls } from './components/CameraControls';
-import { FilterControls } from './components/FilterControls';
-import { AdvancedFaceControls } from './components/AdvancedFaceControls';
-import { FaceSwapControls } from './components/FaceSwapControls';
-import { RestorationControls } from './components/RestorationControls';
-import { SourceFaceManager } from './components/SourceFaceManager';
-import { Gallery } from './components/Gallery';
-import { BackendFaceSwap } from './components/BackendFaceSwap';
-import { PerformanceSettingsComponent } from './components/PerformanceSettings';
-import { FilterSettings } from './lib/videoFilters';
-import { uploadMedia } from './lib/supabase';
+import { AdvancedVideoCanvas } from '../components/camera/AdvancedVideoCanvas';
+import { CameraControls } from '../components/camera/CameraControls';
+import { FilterControls } from '../components/effects/FilterControls';
+import { AdvancedFaceControls } from '../components/face-processing/AdvancedFaceControls';
+import { FaceSwapControls } from '../components/face-processing/FaceSwapControls';
+import { RestorationControls } from '../components/face-processing/RestorationControls';
+import { SourceFaceManager } from '../components/face-processing/SourceFaceManager';
+import { Gallery } from '../components/gallery/Gallery';
+import { BackendFaceSwap } from '../components/backend/BackendFaceSwap';
+import { PerformanceSettingsComponent } from '../components/settings/PerformanceSettings';
+import { FilterSettings } from '../lib/utils/videoFilters';
+import { uploadMedia } from '../lib/services/supabase';
 import { Camera, Grid, Sparkles, Users, Cpu, Settings } from 'lucide-react';
 import {
   ProcessingPipeline,
@@ -18,8 +18,8 @@ import {
   DetectedFace,
   SwapOptions,
   RestorationOptions,
-} from './lib/faceProcessing';
-import { FaceEffectSettings } from './lib/faceProcessing/FaceEffectsProcessor';
+} from '../lib/faceProcessing';
+import { FaceEffectSettings } from '../lib/faceProcessing/FaceEffectsProcessor';
 
 function App() {
   const [activeTab, setActiveTab] = useState<'camera' | 'gallery' | 'advanced' | 'deepface' | 'backend' | 'settings'>('camera');

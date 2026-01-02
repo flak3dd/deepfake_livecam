@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Cpu, Zap, Gauge, Battery, Info, Apple, Settings } from 'lucide-react';
-import { deviceDetector, DeviceCapabilities, OptimizationMode } from '../lib/deviceDetection';
-import { getPerformanceSettings, savePerformanceSettings, getOptimizationPresets, PerformanceSettings } from '../lib/performanceSettings';
+import { deviceDetector, DeviceCapabilities, OptimizationMode } from '../../lib/utils/deviceDetection';
+import { getPerformanceSettings, savePerformanceSettings, getOptimizationPresets, PerformanceSettings } from '../../lib/utils/performanceSettings';
 
 interface PerformanceSettingsProps {
   userId?: string;

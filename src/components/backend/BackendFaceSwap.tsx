@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Upload, Loader, Check, AlertCircle, Terminal, Play, Copy } from 'lucide-react';
-import { faceProcessingService } from '../lib/faceProcessingService';
+import { faceProcessingService } from '../../lib/services/faceProcessingService';
 
 export const BackendFaceSwap: React.FC = () => {
   const [sourceFace, setSourceFace] = useState<File | null>(null);

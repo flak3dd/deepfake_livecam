@@ -1,6 +1,6 @@
 import React from 'react';
-import { RenderOptions, ProcessingPipeline, DetectedFace } from '../lib/faceProcessing';
-import { FaceEffectType, FaceEffectSettings } from '../lib/faceProcessing/FaceEffectsProcessor';
+import { RenderOptions, ProcessingPipeline, DetectedFace } from '../../lib/faceProcessing';
+import { FaceEffectType, FaceEffectSettings } from '../../lib/faceProcessing/FaceEffectsProcessor';
 import { Eye, Smile, Target, Wand2, Layers } from 'lucide-react';
 
 interface AdvancedFaceControlsProps {

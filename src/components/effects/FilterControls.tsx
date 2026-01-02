@@ -1,5 +1,5 @@
 import React from 'react';
-import { FilterSettings, FilterType } from '../lib/videoFilters';
+import { FilterSettings, FilterType } from '../../lib/utils/videoFilters';
 
 interface FilterControlsProps {
   filter: FilterSettings;

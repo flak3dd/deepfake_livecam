@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { supabase } from '../services/supabase';
 import { DeviceType, OptimizationMode } from './deviceDetection';
 
 export interface PerformanceSettings {

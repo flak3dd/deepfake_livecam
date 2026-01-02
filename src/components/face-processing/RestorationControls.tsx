@@ -1,5 +1,5 @@
 import { Sparkles } from 'lucide-react';
-import { RestorationOptions } from '../lib/faceProcessing';
+import { RestorationOptions } from '../../lib/faceProcessing';
 
 interface RestorationControlsProps {
   options: RestorationOptions;

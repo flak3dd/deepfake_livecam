@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as faceapi from 'face-api.js';
-import { applyFilter, FilterSettings } from '../lib/videoFilters';
+import { applyFilter, FilterSettings } from '../../lib/utils/videoFilters';
 
 interface VideoCanvasProps {
   filter: FilterSettings;

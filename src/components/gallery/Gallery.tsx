@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Trash2, Download, Play } from 'lucide-react';
-import { getMediaItems, deleteMedia, getMediaUrl } from '../lib/supabase';
+import { getMediaItems, deleteMedia, getMediaUrl } from '../../lib/services/supabase';
 
 interface MediaItem {
   id: string;

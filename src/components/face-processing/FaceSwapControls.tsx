@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Upload, RefreshCw, Sliders } from 'lucide-react';
-import { SwapOptions } from '../lib/faceProcessing';
+import { SwapOptions } from '../../lib/faceProcessing';
 
 interface FaceSwapControlsProps {
   enabled: boolean;
