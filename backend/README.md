@@ -55,6 +55,7 @@ High-performance Python backend for face swapping and restoration using state-of
 
 ### Docker Deployment (Recommended)
 - **GPU Quick Start:** [GPU_QUICK_START.md](GPU_QUICK_START.md) - 5-minute CUDA GPU deployment
+- **Management Script:** [GPU_DOCKER_SCRIPT.md](GPU_DOCKER_SCRIPT.md) - Complete Docker management tool
 - **Complete GPU Guide:** [BUILD_GPU.md](BUILD_GPU.md) - Detailed NVIDIA GPU setup and optimization
 - **Docker Guide:** [README_DOCKER.md](README_DOCKER.md) - CPU vs GPU comparison and best practices
 

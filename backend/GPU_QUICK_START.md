@@ -5,6 +5,15 @@ Get your CUDA-accelerated Deep Live Cam backend running in minutes.
 ## Prerequisites Check
 
 ```bash
+# Navigate to backend directory
+cd backend
+
+# Automated system check (recommended)
+./gpu-docker.sh check
+```
+
+Or manually verify:
+```bash
 # 1. Verify NVIDIA GPU
 nvidia-smi
 
@@ -19,23 +28,53 @@ If any of these fail, see [BUILD_GPU.md](BUILD_GPU.md) for detailed setup.
 
 ## One-Command Deployment
 
+### Option 1: Complete Management Script (Recommended)
+
 ```bash
 # Navigate to backend directory
 cd backend
 
-# Build and run (all-in-one)
+# Build and run (all-in-one with system checks)
+./gpu-docker.sh rebuild
+```
+
+**Features:**
+- Comprehensive system validation
+- Color-coded output
+- Automatic health checks
+- Built-in monitoring
+
+See [GPU_DOCKER_SCRIPT.md](GPU_DOCKER_SCRIPT.md) for all commands.
+
+### Option 2: Simple Build Script
+
+```bash
+# Build and run
 ./build-gpu.sh rebuild
 ```
 
-That's it! The service will be running at `http://localhost:8000`
-
-## Alternative: Docker Compose
+### Option 3: Docker Compose
 
 ```bash
 docker-compose -f docker-compose-gpu.yml up --build -d
 ```
 
 ## Verify It's Working
+
+### Using Management Script (Easiest)
+
+```bash
+# Show complete status
+./gpu-docker.sh status
+
+# Test API
+./gpu-docker.sh test
+
+# Monitor GPU usage in real-time
+./gpu-docker.sh monitor
+```
+
+### Manual Verification
 
 ```bash
 # 1. Check health
@@ -50,6 +89,7 @@ curl http://localhost:8000/health
 
 # 2. View logs
 docker logs deep-live-cam-gpu
+# Or: ./gpu-docker.sh logs
 
 # Look for:
 # Device: cuda
@@ -70,6 +110,34 @@ curl -X POST http://localhost:8000/api/face-swap \
 ```
 
 ## Common Commands
+
+### Using Management Script
+
+```bash
+# View logs
+./gpu-docker.sh logs           # Last 50 lines
+./gpu-docker.sh logs 100       # Last 100 lines
+./gpu-docker.sh logs follow    # Real-time
+
+# Container management
+./gpu-docker.sh stop           # Stop service
+./gpu-docker.sh restart        # Restart service
+./gpu-docker.sh remove         # Remove container
+./gpu-docker.sh status         # Show status
+
+# Monitoring
+./gpu-docker.sh monitor        # GPU and container stats
+./gpu-docker.sh test           # Test API endpoints
+
+# Shell access
+./gpu-docker.sh shell          # Interactive bash
+
+# Maintenance
+./gpu-docker.sh backup         # Backup models
+./gpu-docker.sh cleanup        # Clean Docker resources
+```
+
+### Direct Docker Commands
 
 ```bash
 # View logs
@@ -139,6 +207,7 @@ docker exec deep-live-cam-gpu nvidia-smi
 
 ## Next Steps
 
+- **Management Script Guide**: [GPU_DOCKER_SCRIPT.md](GPU_DOCKER_SCRIPT.md) - Complete command reference
 - **API Documentation**: http://localhost:8000/docs
 - **Detailed GPU Guide**: [BUILD_GPU.md](BUILD_GPU.md)
 - **Docker Guide**: [README_DOCKER.md](README_DOCKER.md)
