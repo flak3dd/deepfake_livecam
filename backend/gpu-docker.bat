@@ -215,7 +215,7 @@ call :log_info "Building image: %IMAGE_NAME%:%IMAGE_TAG%"
 call :log_info "This may take 10-15 minutes on first build..."
 echo.
 
-docker build -f "%DOCKERFILE%" -t "%IMAGE_NAME%:%IMAGE_TAG%" --progress=plain . 2>&1 | tee build.log
+docker build -f "%DOCKERFILE%" -t "%IMAGE_NAME%:%IMAGE_TAG%" --progress=plain .
 
 if errorlevel 1 (
     call :log_error "Build failed"
