@@ -247,7 +247,7 @@ if not errorlevel 1 (
     exit /b 1
 )
 
-docker images --format "{{.Repository}}:{{.Tag}}" | findstr /x "%IMAGE_NAME%:%IMAGE_TAG%" >nul 2>&1
+docker images "%IMAGE_NAME%" --format "{{.Repository}}:{{.Tag}}" | findstr "%IMAGE_TAG%" >nul 2>&1
 if errorlevel 1 (
     call :log_error "Image not found: %IMAGE_NAME%:%IMAGE_TAG%"
     echo Build the image first: %~nx0 build
