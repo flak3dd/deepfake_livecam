@@ -25,3 +25,10 @@ build/
 .pytest_cache/
 .coverage
 htmlcov/
+models/
+*.sh
+*.bat
+*.json
+.dockerignore
+Dockerfile*
+docker-compose*
