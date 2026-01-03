@@ -8,6 +8,9 @@ echo ============================================================
 echo Deep Live Cam - GPU Build and Run
 echo ============================================================
 echo.
+echo NOTE: GPU warnings during system check are normal.
+echo GPU detection happens when the container actually runs.
+echo.
 
 :: Step 1: System Check
 echo [STEP 1/3] Running system checks...
@@ -55,10 +58,15 @@ echo ============================================================
 echo.
 echo API is available at: http://localhost:8000
 echo.
+echo Verifying GPU access in container...
+timeout /t 5 /nobreak >nul
+call gpu-docker.bat shell -c "python3 -c \"import torch; print('GPU Available:', torch.cuda.is_available()); print('GPU Count:', torch.cuda.device_count() if torch.cuda.is_available() else 0)\""
+echo.
 echo Useful commands:
 echo   gpu-docker.bat status   - Check container status
 echo   gpu-docker.bat logs     - View container logs
 echo   gpu-docker.bat monitor  - Monitor GPU usage
+echo   gpu-docker.bat test     - Test the API
 echo   gpu-docker.bat stop     - Stop the container
 echo   gpu-docker.bat shell    - Open shell in container
 echo.

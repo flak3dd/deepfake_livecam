@@ -10,7 +10,10 @@ services:
       - "8000:8000"
     volumes:
       - ./models:/app/models
-      - ./:/app
+      - ./main.py:/app/main.py
+      - ./face_swapper.py:/app/face_swapper.py
+      - ./face_restoration.py:/app/face_restoration.py
+      - ./model_manager.py:/app/model_manager.py
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - NVIDIA_VISIBLE_DEVICES=all
