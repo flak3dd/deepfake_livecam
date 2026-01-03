@@ -64,6 +64,8 @@ RUN pip3 install --no-cache-dir \
 
 RUN pip3 install --no-cache-dir "numpy<2.0.0,>=1.24.0" --force-reinstall
 
+RUN pip3 install --no-cache-dir "opencv-python-headless<4.8.0" --force-reinstall
+
 RUN mkdir -p /root/.insightface/models /app/models
 
 COPY *.py ./
